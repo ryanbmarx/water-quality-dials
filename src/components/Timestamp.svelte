@@ -1,5 +1,6 @@
 <script>
 	import { format } from "date-fns-tz";
+	import { onMount, afterUpdate } from "svelte";
 
 	export let updated = "";
 
@@ -19,10 +20,13 @@
 		"Nov.",
 		"Dec.",
 	];
-	let time = new Date(updated) || "";
-	let timeFormatted = formatTime(time);
+
+	$: time = new Date(updated) || "";
+	$: timeFormatted = formatTime(time);
+
 	function formatTime(u) {
 		if (!updated) return;
+		console.log({ updated });
 		try {
 			let date = format(u, DATE_FORMAT);
 			let time = format(u, TIME_FORMAT);
@@ -37,6 +41,10 @@
 			return "";
 		}
 	}
+
+	afterUpdate(() => {
+		console.log(updated);
+	});
 </script>
 
 <style>
@@ -46,6 +54,9 @@
 		max-width: 50%;
 		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;
+
+		/* Timestamp probably will be ~3 lines, at 1.3em per line. This (hopefully) keeps reflows down */
+		min-height: 4em;
 	}
 
 	.timestamp.visible {

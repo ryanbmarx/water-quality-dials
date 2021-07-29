@@ -28,12 +28,13 @@
 
 	export let uniqueSlug = slugify(name);
 
-	export let updated = "";
-
+	$: updated = "";
 	$: valueLabel = getValueLabel(value);
+	$: formattedValue = value ? `${value} ppb` : "-";
 
 	// Takes the thresholds as defined in the config data and finds the proper text label
 	function getValueLabel(value) {
+		if (!value) return "Loading ...";
 		for (let [text, maxBound] of labels) {
 			if (value <= maxBound) return text;
 		}
@@ -51,6 +52,7 @@
 			average_high = 54;
 			high = 90;
 			low = 10;
+			updated = "2021-07-23T10:33:36.743";
 		}, 2000);
 	});
 </script>
@@ -95,7 +97,7 @@
 		max-width: 50%;
 		min-height: 60px;
 
-		opacity: 0;
+		opacity: 0.2;
 		transition: opacity var(--fade-in-speed) ease;
 	}
 
@@ -109,7 +111,7 @@
 		white-space: nowrap;
 		margin: 0 auto;
 
-		opacity: 0;
+		opacity: 0.2;
 		transition: opacity var(--fade-in-speed) ease;
 	}
 
@@ -132,7 +134,7 @@
 		{main_dial_stops} />
 	<Timestamp {updated} />
 	<span class:visible={value} class="label">{valueLabel}</span>
-	<span class:visible={value} class="value">{value} ppb</span>
+	<span class:visible={value} class="value">{formattedValue}</span>
 	<Gauge
 		{uniqueSlug}
 		{average_low}

@@ -27,7 +27,7 @@
 	:global(html body .water-quality) {
 		/* TYPOGRAPHY */
 		--fonts: "Omnes", "Helvetica", "Arial", sans-serif;
-		--grid-gap: 48px;
+		--grid-gap: 32px;
 
 		--color-blue-dark: #274571;
 		--color-brown-dark: #3c2313;
@@ -81,9 +81,13 @@
 	} */
 	.dials {
 		display: grid;
-		gap: var(--grid-gap);
-		grid-template-columns: repeat(3, minmax(1px, 1fr));
+		gap: var(--grid-gap) calc(var(--grid-gap) * 2);
+		grid-template-columns: minmax(1px, 1fr);
 		margin: 1em 0;
+	}
+
+	.dials--grid {
+		grid-template-columns: repeat(3, minmax(1px, 1fr));
 	}
 
 	.dials > :global(*) {
@@ -99,7 +103,7 @@
 			showAll={false}
 			label="Choose a branch" />
 	{/if}
-	<div class="dials">
+	<div class="dials" class:dials--grid={!$isMobile}>
 		{#each dials as dial}
 			<Dial visible={slugify(dial.name) === visibleBranch || !$isMobile} {...dial} />
 		{/each}
