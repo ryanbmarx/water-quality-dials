@@ -84,8 +84,9 @@
 		display: inline-block;
 		z-index: 2;
 		height: 1.2em;
-		background: #cfdde6;
+
 		width: 10px;
+		background: var(--gauge-color-value);
 		max-height: 2em;
 		opacity: 0.9;
 	}
@@ -105,14 +106,14 @@
 	}
 
 	.tick--value {
-		background: #235686;
+		background: var(--gauge-color-value);
 	}
 	.tick--high {
-		background: #000;
+		background: var(--gauge-color-high);
 	}
 
 	.tick--low {
-		background: #a0bbce;
+		background: var(--gauge-color-low);
 	}
 
 	.legend {

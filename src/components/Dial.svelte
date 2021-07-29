@@ -29,13 +29,7 @@
 
 	export let updated = "";
 
-	// value = 90
-	// average_low = 26;
-	// average_high = 40;
-	// high = 90;
-	// low = 10;
-
-	let valueLabel = getValueLabel(value);
+	$: valueLabel = getValueLabel(value);
 
 	// Takes the thresholds as defined in the config data and finds the proper text label
 	function getValueLabel(value) {
