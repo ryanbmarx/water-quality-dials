@@ -2,6 +2,7 @@
 	// COMPONENTS
 	import Charts from "./Charts.svelte";
 	import Timestamp from "./Timestamp.svelte";
+	import Gauge from "./Gauge.svelte";
 
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
@@ -13,9 +14,11 @@
 
 	export let min = 0;
 	export let max = 100;
+	export let main_dial_stops = 10;
+	export let main_gauge_stops = 5;
 
-	export let average_min = 26;
-	export let average_max = 40;
+	export let average_low = 26;
+	export let average_high = 40;
 
 	export let labels = [];
 
@@ -25,16 +28,8 @@
 
 	let valueLabel = getValueLabel(value);
 
+	// Takes the thresholds as defined in the config data and finds the proper text label
 	function getValueLabel(value) {
-		/*
-  
-  North Branch: Good (0-33), Low Caution (34 – 54), High Caution (55-100)
-
-South Branch: Good (0-28), Low Caution (29-38), High Caution (39-100)
-
-Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
-  */
-
 		for (let [text, maxBound] of labels) {
 			if (value <= maxBound) return text;
 		}
@@ -111,8 +106,23 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 <div id={uniqueSlug} class="dial">
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
-	<Charts {uniqueSlug} {average_min} {average_max} {min} {max} {value} />
+	<Charts
+		{uniqueSlug}
+		{average_low}
+		{average_high}
+		{min}
+		{max}
+		{value}
+		{main_dial_stops} />
 	<Timestamp {updated} />
 	<span class="label">{valueLabel}</span>
 	<span class="value">{value} ppb</span>
+	<Gauge
+		{uniqueSlug}
+		{average_low}
+		{average_high}
+		{min}
+		{max}
+		{value}
+		{main_gauge_stops} />
 </div>

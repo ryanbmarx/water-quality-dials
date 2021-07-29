@@ -4,15 +4,15 @@
 
 	export let uniqueSlug = "";
 
-	export let average_min = 26;
-	export let average_max = 40;
+	export let average_low = 26;
+	export let average_high = 40;
 
-	export let min = 0;
-	export let max = 100;
-	export let main_dial_stops = 10;
+	export let min;
+	export let max;
+	export let main_dial_stops;
 	export let value = -1;
 
-	let rotation = (value / (max - min)) * 180;
+	let needleRotation = (value / (max - min)) * 180;
 
 	function getStopLabel(stop) {
 		let range = max - min;
@@ -149,7 +149,7 @@
 
 <div class="chart">
 	<div class="circles">
-		<DialOuter {min} {max} start={average_min} end={average_max} {uniqueSlug} />
+		<DialOuter {min} {max} start={average_low} end={average_high} {uniqueSlug} />
 		<div class="circle circle--clip circle--inner-bg" />
 		<ul class="stops">
 			{#each Array(main_dial_stops + 1) as _, stop}
@@ -160,7 +160,7 @@
 		</ul>
 		<div class="circle circle--clip circle--inner-dial" />
 		{#if value >= 0}
-			<Needle title="Water quality is {value} ppb" {rotation} />
+			<Needle title="Water quality is {value} ppb" rotation={needleRotation} />
 		{/if}
 	</div>
 </div>
