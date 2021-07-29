@@ -29,6 +29,7 @@
 		flex-wrap: wrap;
 		place-items: top center;
 		place-content: top center;
+		margin: 1em 0;
 	}
 
 	.dials > :global(*) {
