@@ -8,19 +8,21 @@
 
 	export let average_high;
 	export let average_low;
-	export let high = 90;
-	export let low = 10;
+	export let high;
+	export let low;
 
 	// CALCULATE POSITIONS
 	let range = max - min;
 	let increment = range / main_gauge_stops;
 
-	let placeHigh = ((high - min) / range) * 100;
-	let placeLow = ((low - min) / range) * 100;
-	let placeValue = ((value - min) / range) * 100;
+	$: placeHigh = ((high - min) / range) * 100;
+	$: placeLow = ((low - min) / range) * 100;
+	$: placeValue = ((value - min) / range) * 100;
 
-	let placeAvgLow = ((average_low - min) / range) * 100;
-	let avgWidth = ((average_high - min) / range) * 100 - placeAvgLow;
+	$: placeAvgLow = ((average_low - min) / range) * 100;
+	$: avgWidth = ((average_high - min) / range) * 100 - placeAvgLow;
+
+	const DEFAULT_LABEL_TEXT = "-";
 
 	function getStops() {
 		const s = [];
@@ -38,6 +40,10 @@
 	}
 
 	const stops = getStops();
+
+	function getLabel(val) {
+		return val ? `${val} ppb` : DEFAULT_LABEL_TEXT;
+	}
 </script>
 
 <style>
@@ -148,27 +154,39 @@
 		{/each}
 	</ul>
 	<div class="gauge__chart">
-		<span style="left: {placeAvgLow}%; width: {avgWidth}%" class="average" />
-		<span style="left: {placeHigh}%" class="tick tick--high" />
-		<span style="left: {placeLow}%" class="tick tick--low" />
-		<span style="left: {placeValue}%" class="tick tick--value" />
+		{#if average_low && average_high}
+			<span style="left: {placeAvgLow}%; width: {avgWidth}%" class="average" />
+		{/if}
+		{#if high}
+			<span style="left: {placeHigh}%" class="tick tick--high" />
+		{/if}
+		{#if low}
+			<span style="left: {placeLow}%" class="tick tick--low" />
+		{/if}
+		{#if value}
+			<span style="left: {placeValue}%" class="tick tick--value" />
+		{/if}
 	</div>
 	<ul class="legend">
 		<li>
 			<span class="average" />
-			Average: {average_low}-{average_high} ppb
+			{#if average_low && average_high}
+				Average: {average_low}-{average_high} ppb
+			{:else}
+				Average: {DEFAULT_LABEL_TEXT}
+			{/if}
 		</li>
 		<li>
 			<span class="tick tick--high" />
-			High: {high} ppb
+			High: {getLabel(high)}
 		</li>
 		<li>
 			<span class="tick tick--low" />
-			Low: {low} ppb
+			Low: {getLabel(low)}
 		</li>
 		<li>
 			<span class="tick tick--value" />
-			Latest: {value} ppb
+			Latest: {getLabel(value)}
 		</li>
 	</ul>
 </div>

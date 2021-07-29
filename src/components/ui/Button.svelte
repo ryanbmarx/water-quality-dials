@@ -49,7 +49,7 @@
 			var(--btn-color-accent, var(--color-accent, #009bff))
 		);
 		color: var(--btn-color-text, var(--color-accent-text, white));
-		transition: filter 150ms ease;
+		transition: filter var(--fade-in-speed) ease;
 		font-weight: bold;
 	}
 

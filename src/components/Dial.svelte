@@ -6,25 +6,34 @@
 
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
+	import { onMount } from "svelte";
 
 	export let name = "";
 	export let description = "";
-
-	export let value = 40;
 
 	export let min = 0;
 	export let max = 100;
 	export let main_dial_stops = 10;
 	export let main_gauge_stops = 5;
 
-	export let average_low = 26;
-	export let average_high = 40;
+	export let value;
+	export let average_low;
+	export let average_high;
+	export let high;
+	export let low;
 
+	// The scale of "badness"
 	export let labels = [];
 
 	export let uniqueSlug = slugify(name);
 
 	export let updated = "";
+
+	// value = 90
+	// average_low = 26;
+	// average_high = 40;
+	// high = 90;
+	// low = 10;
 
 	let valueLabel = getValueLabel(value);
 
@@ -37,6 +46,18 @@
 		// Our number is super-duper high. Just return the largest value
 		return labels[labels.length - 1][0];
 	}
+
+	onMount(() => {
+		console.log("No data ...");
+		setTimeout(function () {
+			console.log("... DATA!");
+			value = 50;
+			average_low = 1;
+			average_high = 100;
+			high = 90;
+			low = 10;
+		}, 2000);
+	});
 </script>
 
 <style>
@@ -81,6 +102,9 @@
 		width: 100%;
 		max-width: 50%;
 		min-height: 60px;
+
+		opacity: 0;
+		transition: opacity var(--fade-in-speed) ease;
 	}
 
 	.value {
@@ -90,8 +114,16 @@
 		font-weight: bold;
 		font-variant: small-caps;
 		color: var(--label-color, black);
-
+		white-space: nowrap;
 		margin: 0 auto;
+
+		opacity: 0;
+		transition: opacity var(--fade-in-speed) ease;
+	}
+
+	.label.visible,
+	.value.visible {
+		opacity: 1;
 	}
 </style>
 
@@ -107,12 +139,14 @@
 		{value}
 		{main_dial_stops} />
 	<Timestamp {updated} />
-	<span class="label">{valueLabel}</span>
-	<span class="value">{value} ppb</span>
+	<span class:visible={value} class="label">{valueLabel}</span>
+	<span class:visible={value} class="value">{value} ppb</span>
 	<Gauge
 		{uniqueSlug}
 		{average_low}
 		{average_high}
+		{high}
+		{low}
 		{min}
 		{max}
 		{value}

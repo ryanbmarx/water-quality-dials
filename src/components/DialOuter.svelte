@@ -9,13 +9,13 @@
 	export let end;
 
 	// Make sure our numbers are not outside the range
-	const startValue = start < min ? min : start;
-	const endValue = end > max ? max : end;
+	$: startValue = start < min ? min : start;
+	$: endValue = end > max ? max : end;
 
 	// Take our start and end values (our hi/lo) and make it into a decimal percentage (i.e. 0.5 == 50%)
 	// Cut it in half, because we are working with a semi-circle and want to show a slice of that semicircle;
-	let highlightPercent = (endValue - min) / range / 2;
-	let coverPercent = (startValue - min) / range / 2;
+	$: highlightPercent = (endValue - min) / range / 2;
+	$: coverPercent = (startValue - min) / range / 2;
 
 	// Gives us a 4-quadrant plane. The math is easier when the radius = 1
 	const height = 2;
@@ -61,10 +61,23 @@
 
 	.cover {
 		fill: var(--color-outer-dial);
+		transform: rotate(-90deg);
+		transition: transform calc(2 * var(--fade-in-speed)) ease;
+		transition-delay: var(--fade-in-speed);
 	}
 
 	.highlight {
 		fill: var(--color-outer-dial-highlight);
+		transform: rotate(-90deg);
+		transition: transform calc(2 * var(--fade-in-speed)) ease;
+	}
+
+	.highlight.visible {
+		transform: rotate(0);
+	}
+
+	.cover.visible {
+		transform: rotate(0);
 	}
 
 	.label {
@@ -77,6 +90,13 @@
 		text-align: left;
 
 		margin: 0;
+
+		opacity: 0;
+		transition: opacity var(--fade-in-speed) ease;
+	}
+
+	.label.visible {
+		opacity: 1;
 	}
 
 	.label::before {
@@ -105,10 +125,10 @@
 		class="circle--outer-dial__highlight"
 		viewBox="{-0.5 * width} {-0.5 * height} {width} {height}"
 		xmlns="http://www.w3.org/2000/svg">
-		<path class="highlight" d={d(highlightPercent)} />
-		<path class="cover" d={d(coverPercent)} />
+		<path class:visible={start && end} class="highlight" d={d(highlightPercent)} />
+		<path class:visible={start && end} class="cover" d={d(coverPercent)} />
 	</svg>
 </div>
-<p id="{uniqueSlug}-outer-label" class="label">
+<p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end}>
 	Average for last month: <strong>{start}-{end} ppb</strong>
 </p>

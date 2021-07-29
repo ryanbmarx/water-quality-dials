@@ -3,7 +3,6 @@
 		{
 			"name": "Main stem",
 			"description": "Near Michigan Avenue",
-			"updated": "2021-07-09",
 			"labels": [
 				["Good", 6],
 				["Low Caution", 9],
@@ -13,7 +12,6 @@
 		{
 			"name": "North Branch",
 			"description": "Near Goose Island",
-			"updated": "2021-07-23",
 			"labels": [
 				["Good", 33],
 				["Low Caution", 54],
@@ -23,7 +21,6 @@
 		{
 			"name": "South Branch",
 			"description": "Near Eleanor Boat House",
-			"updated": "2021-07-31",
 			"labels": [
 				["Good", 28],
 				["Low Caution", 38],

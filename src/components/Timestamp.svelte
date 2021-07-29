@@ -22,6 +22,7 @@
 	let time = new Date(updated) || "";
 	let timeFormatted = formatTime(time);
 	function formatTime(u) {
+		if (!updated) return;
 		try {
 			let date = format(u, DATE_FORMAT);
 			let time = format(u, TIME_FORMAT);
@@ -41,14 +42,17 @@
 <style>
 	.timestamp {
 		display: block;
-
 		margin: 0 auto 0.5em auto;
 		max-width: 50%;
+		opacity: 0;
+		transition: opacity var(--fade-in-speed) ease;
+	}
+
+	.timestamp.visible {
+		opacity: 1;
 	}
 </style>
 
-{#if timeFormatted}
-	<span class="timestamp">
-		Water conditions: <time datetime={time.getTime()}>{timeFormatted}</time>
-	</span>
-{/if}
+<span class="timestamp" class:visible={updated}>
+	Water conditions: <time datetime={time.getTime()}>{timeFormatted}</time>
+</span>

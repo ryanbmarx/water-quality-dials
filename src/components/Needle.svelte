@@ -18,7 +18,7 @@
 		width: calc(var(--inner-dial-width) / 2);
 		z-index: 11;
 		transform-origin: 86% center;
-		transition: transform 250ms ease;
+		transition: transform var(--fade-in-speed) ease;
 	}
 
 	circle {

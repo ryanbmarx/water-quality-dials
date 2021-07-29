@@ -21,6 +21,7 @@
 
 		/* UI STUFF */
 		--arrow-length: 15px;
+		--fade-in-speed: 250ms;
 
 		font-family: var(--fonts);
 		font-size: 1rem;
