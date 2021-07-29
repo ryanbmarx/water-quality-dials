@@ -1,5 +1,9 @@
 <script>
+	// COMPONENTS
 	import Gauges from "./Gauges.svelte";
+
+	// UTILS
+	import { slugify } from "../utils/slugify.js";
 
 	export let name = "";
 	export let description = "";
@@ -14,6 +18,8 @@
 	export let average_max = 40;
 
 	export let labels = [];
+
+	export let uniqueSlug = slugify(name);
 
 	let timestamp = formatTimestamp(time);
 	let valueLabel = getValueLabel(value);
@@ -106,10 +112,10 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 	}
 </style>
 
-<div class="dial">
+<div id={uniqueSlug} class="dial">
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
-	<Gauges {average_min} {average_max} {min} {max} />
+	<Gauges {uniqueSlug} {average_min} {average_max} {min} {max} />
 	<span class="timestamp">{timestamp}</span>
 	<span class="label">{valueLabel}</span>
 	<span class="value">{value} ppb</span>

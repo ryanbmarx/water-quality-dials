@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from "svelte";
 
+	export let uniqueSlug = "";
+
 	export let min = 0;
 	export let max = 100;
 
@@ -74,14 +76,38 @@
 	}
 
 	.label {
+		font: bold 12px/1.3em var(--fonts);
 		position: absolute;
-		top: 100%;
+		top: 50%;
 		left: 0;
-		width: 25%;
+
+		width: 20%;
+		text-align: left;
+
+		margin: 0;
+	}
+
+	.label::before {
+		content: "";
+		display: block;
+		width: 1px;
+		height: var(--arrow-length);
+		margin-left: 0.5em;
+		background: var(--color-text);
+		margin: 0.25em;
+	}
+
+	.label strong {
+		display: block;
+		font-size: 14px;
+		line-height: 1.3em;
+		color: var(--color-gray);
 	}
 </style>
 
-<div class="circle circle--outer-dial">
+<div
+	class="circle circle--clip circle--outer-dial"
+	aria-labelledby="{uniqueSlug}-outer-label">
 	<svg
 		style="transform: rotate(-180deg)"
 		class="circle--outer-dial__highlight"
@@ -90,5 +116,7 @@
 		<path class="highlight" d={d(highlightPercent)} />
 		<path class="cover" d={d(coverPercent)} />
 	</svg>
-	<p class="label">Average for last month: <strong>6-7 ppb</strong></p>
 </div>
+<p id="{uniqueSlug}-outer-label" class="label">
+	Average for last month: <strong>6-7 ppb</strong>
+</p>

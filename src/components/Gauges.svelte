@@ -1,6 +1,8 @@
 <script>
 	import DialOuter from "./DialOuter.svelte";
 
+	export let uniqueSlug = "";
+
 	export let average_min = 26;
 	export let average_max = 40;
 
@@ -18,17 +20,38 @@
 
 <style>
 	.chart {
-		margin: 1rem auto;
+		margin: 1em auto 0 auto;
+
 		position: relative;
+		height: 0;
+		padding: 0 0 calc(50% + 1em) 0;
+		overflow: visible;
 	}
 
 	.circles {
 		outline: 1px solid #009bff;
-		height: 0;
-		padding-bottom: 100%;
 
-		/* -webkit-clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
-		clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); */
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 0;
+		padding: 0 0 100% 0;
+		width: 100%;
+	}
+
+	.circles::after {
+		/* Thick, bottom rule on main dial */
+		content: "";
+		display: block;
+		height: 3px;
+		width: calc(10px + var(--inner-dial-width));
+		background: black;
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+
+		transform: translate(-50%, -50%);
 	}
 
 	:global(.circle) {
@@ -42,14 +65,19 @@
 		transform: translate(-50%, -50%);
 	}
 
-	@supports (aspect-ratio: 1 / 1) {
+	:global(.circle--clip) {
+		-webkit-clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+		clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+	}
+
+	/* @supports (aspect-ratio: 1 / 1) {
 		:global(.circle),
 		.circles {
 			aspect-ratio: 1 / 1;
 			height: auto;
 			padding-bottom: 0;
 		}
-	}
+	} */
 
 	.circle--inner-bg {
 		background: var(--color-background);
@@ -117,8 +145,8 @@
 
 <div class="chart">
 	<div class="circles">
-		<DialOuter {min} {max} start={average_min} end={average_max} />
-		<div class="circle circle--inner-bg" />
+		<DialOuter {min} {max} start={average_min} end={average_max} {uniqueSlug} />
+		<div class="circle circle--clip circle--inner-bg" />
 		<ul class="stops">
 			{#each Array(main_dial_stops + 1) as _, stop}
 				<li class="stop" style="--stop-rotation: {(180 / main_dial_stops) * stop}deg">
@@ -126,6 +154,6 @@
 				</li>
 			{/each}
 		</ul>
-		<div class="circle circle--inner-dial" />
+		<div class="circle circle--clip circle--inner-dial" />
 	</div>
 </div>

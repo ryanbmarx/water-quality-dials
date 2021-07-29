@@ -12,7 +12,12 @@
 		/* TYPOGRAPHY */
 		--fonts: "Omnes", "Helvetica", "Arial", sans-serif;
 		--grid-gap: 32px;
+
+		--color-gray: #888;
 		--color-text: #222;
+
+		/* UI STUFF */
+		--arrow-length: 15px;
 
 		font-family: var(--fonts);
 		font-size: 1rem;
