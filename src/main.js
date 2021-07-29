@@ -5,8 +5,7 @@ const SELECTOR = "#dials";
 const target = document.querySelector(SELECTOR);
 
 if (target) {
-	const data = target.querySelector(`${SELECTOR}-config`).innerText || {};
-	console.log({ data: JSON.parse(data) });
+	const data = document.querySelector(`${SELECTOR}-config`).innerText || {};
 	const app = new App({
 		hydrate: true,
 		target: target,

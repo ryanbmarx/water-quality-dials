@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from "svelte";
-
 	export let uniqueSlug = "";
 
 	export let min;
@@ -23,10 +21,6 @@
 	const height = 2;
 	const width = 2;
 
-	onMount(() => {
-		console.log({ start, highlightPercent, end, coverPercent });
-	});
-
 	function getCoordinatesForPercent(percent) {
 		const x = Math.cos(2 * Math.PI * percent);
 		const y = Math.sin(2 * Math.PI * percent);
@@ -45,7 +39,6 @@
 		cumulativePercent += percent;
 
 		const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
-		console.log({ endX, endY });
 
 		// if the slice is more than 50%, take the large arc (the long way around)
 		const largeArcFlag = percent > 0.5 ? 1 : 0;
