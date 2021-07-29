@@ -62,21 +62,13 @@
 
 <style>
 	.dial {
-		--color-outer-dial: #eee;
-		--color-outer-dial-highlight: rgba(0, 0, 0, 0.4);
-		--color-inner-dial: linear-gradient(to left, #3c2313, var(--color-blue-dark));
-		--color-background: #fff;
-
-		--inner-dial-width: 69%;
-		--outer-dial-width: 9px;
-		--stop-label-width: 20px;
 		text-align: center;
 		box-sizing: border-box;
 	}
 
 	.stem {
-		margin: 0 0 0.25em 0;
-		font-size: 1.5rem;
+		font: bold clamp(1em, 3vw, 1.5em) / 1.3em var(--fonts);
+		margin: 0 0;
 	}
 
 	.description {

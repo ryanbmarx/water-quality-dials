@@ -23,6 +23,16 @@
 		--arrow-length: 15px;
 		--fade-in-speed: 250ms;
 
+		/* DIALS */
+		--color-outer-dial: #eee;
+		--color-outer-dial-highlight: rgba(0, 0, 0, 0.4);
+		--color-inner-dial: linear-gradient(to left, #3c2313, var(--color-blue-dark));
+		--color-background: #fff;
+
+		--inner-dial-width: 69%;
+		--outer-dial-width: 9px;
+		--stop-label-width: 20px;
+
 		font-family: var(--fonts);
 		font-size: 1rem;
 		line-height: 1.3em;
@@ -31,7 +41,7 @@
 	}
 	.headline {
 		text-align: center;
-		font-size: 2rem;
+		font: bold clamp(1.3em, 6vw, 2em) / 1.3em var(--fonts);
 		margin-bottom: 1em;
 	}
 	.dials {
