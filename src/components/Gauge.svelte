@@ -87,6 +87,7 @@
 		background: #cfdde6;
 		width: 10px;
 		max-height: 2em;
+		opacity: 0.9;
 	}
 
 	.gauge__chart .average {

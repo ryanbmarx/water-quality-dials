@@ -7,7 +7,11 @@
 				["Good", 6],
 				["Low Caution", 9],
 				["High Caution", 100]
-			]
+			],
+			"min": 0,
+			"max": 100,
+			"main_dial_stops": 10,
+			"main_gauge_stops": 5
 		},
 		{
 			"name": "North Branch",
@@ -16,7 +20,11 @@
 				["Good", 33],
 				["Low Caution", 54],
 				["High Caution", 100]
-			]
+			],
+			"min": 0,
+			"max": 100,
+			"main_dial_stops": 10,
+			"main_gauge_stops": 5
 		},
 		{
 			"name": "South Branch",
@@ -25,7 +33,11 @@
 				["Good", 28],
 				["Low Caution", 38],
 				["High Caution", 100]
-			]
+			],
+			"min": 0,
+			"max": 100,
+			"main_dial_stops": 10,
+			"main_gauge_stops": 5
 		}
 	],
 	"about": {
