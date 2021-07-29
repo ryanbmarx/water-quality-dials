@@ -33,8 +33,6 @@
 	}
 
 	.circles {
-		outline: 1px solid #009bff;
-
 		position: absolute;
 		top: 0;
 		left: 0;

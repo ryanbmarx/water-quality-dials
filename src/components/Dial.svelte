@@ -50,7 +50,6 @@
 		--outer-dial-width: 9px;
 		--stop-label-width: 20px;
 		text-align: center;
-		outline: 1px solid red;
 		box-sizing: border-box;
 	}
 
@@ -62,13 +61,6 @@
 	.description {
 		font-style: italic;
 		margin: 0;
-	}
-
-	.timestamp {
-		display: block;
-
-		margin: 0 auto 0.5em auto;
-		max-width: 50%;
 	}
 
 	.label {

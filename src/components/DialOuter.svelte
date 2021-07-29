@@ -3,27 +3,28 @@
 
 	export let uniqueSlug = "";
 
-	export let min = 0;
-	export let max = 100;
+	export let min;
+	export let max;
+	let range = max - min;
 
-	export let start = 0;
-	export let end = 100;
+	export let start;
+	export let end;
 
 	// Make sure our numbers are not outside the range
 	const startValue = start < min ? min : start;
 	const endValue = end > max ? max : end;
 
 	// Take our start and end values (our hi/lo) and make it into a decimal percentage (i.e. 0.5 == 50%)
-	// Cut it in half, because we are working with a semi-circle;
-	let highlightPercent = (endValue - min) / (max - min) / 2;
-	let coverPercent = (startValue - min) / (max - min) / 2;
+	// Cut it in half, because we are working with a semi-circle and want to show a slice of that semicircle;
+	let highlightPercent = (endValue - min) / range / 2;
+	let coverPercent = (startValue - min) / range / 2;
 
 	// Gives us a 4-quadrant plane. The math is easier when the radius = 1
 	const height = 2;
 	const width = 2;
 
 	onMount(() => {
-		// console.log({ start, end, min, max, highlightPercent, coverPercent });
+		console.log({ start, highlightPercent, end, coverPercent });
 	});
 
 	function getCoordinatesForPercent(percent) {
@@ -32,18 +33,18 @@
 		return [x, y];
 	}
 
+	// Returns an SVG arc to slice a % of a semicircle, starting on the left.
 	function d(percent) {
 		//https://medium.com/hackernoon/a-simple-pie-chart-in-svg-dbdd653b6936
-		console.group(percent);
-		// let cumulativePercent = 0;
+		let cumulativePercent = 0;
 
 		// destructuring assignment sets the two variables at once
-		const [startX, startY] = getCoordinatesForPercent(percent);
-		console.log({ startX, startY });
-		// each slice starts where the last slice ended, so keep a cumulative percent
-		// cumulativePercent += percent;
+		const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
 
-		const [endX, endY] = getCoordinatesForPercent(percent);
+		// each slice starts where the last slice ended, so keep a cumulative percent
+		cumulativePercent += percent;
+
+		const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
 		console.log({ endX, endY });
 
 		// if the slice is more than 50%, take the large arc (the long way around)
@@ -56,7 +57,6 @@
 			`M ${startX} ${startY}`, // Move
 			`A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
 			`L 0 0`, // Line
-			`z`,
 		].join(" ");
 	}
 </script>
@@ -68,7 +68,6 @@
 
 	.cover {
 		fill: var(--color-outer-dial);
-		fill: red;
 	}
 
 	.highlight {
@@ -118,5 +117,5 @@
 	</svg>
 </div>
 <p id="{uniqueSlug}-outer-label" class="label">
-	Average for last month: <strong>6-7 ppb</strong>
+	Average for last month: <strong>{start}-{end} ppb</strong>
 </p>

@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from "svelte";
-
 	export let uniqueSlug;
 	export let min;
 	export let max;
@@ -40,11 +38,6 @@
 	}
 
 	const stops = getStops();
-
-	onMount(() => {
-		console.log({ average_low, average_high, high, low, value, range, increment });
-		console.log({ stops });
-	});
 </script>
 
 <style>
@@ -146,7 +139,7 @@
 	}
 </style>
 
-<div class="gauge">
+<div id="{uniqueSlug}-gauge" class="gauge">
 	<ul class="stops">
 		{#each stops as [label, position]}
 			<li class="stop" style="left:{position}%">
