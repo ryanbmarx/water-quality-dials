@@ -27,7 +27,7 @@
 	:global(html body .water-quality) {
 		/* TYPOGRAPHY */
 		--fonts: "Omnes", "Helvetica", "Arial", sans-serif;
-		--grid-gap: 32px;
+		--grid-gap: 48px;
 
 		--color-blue-dark: #274571;
 		--color-brown-dark: #3c2313;
@@ -80,11 +80,9 @@
 		margin-bottom: 1em;
 	} */
 	.dials {
-		display: flex;
+		display: grid;
 		gap: var(--grid-gap);
-		flex-wrap: wrap;
-		place-items: top center;
-		place-content: top center;
+		grid-template-columns: repeat(3, minmax(1px, 1fr));
 		margin: 1em 0;
 	}
 
