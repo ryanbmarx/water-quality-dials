@@ -52,8 +52,8 @@
 		setTimeout(function () {
 			console.log("... DATA!");
 			value = 50;
-			average_low = 1;
-			average_high = 100;
+			average_low = 13;
+			average_high = 54;
 			high = 90;
 			low = 10;
 		}, 2000);
