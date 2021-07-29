@@ -1,5 +1,6 @@
 <script>
 	import DialOuter from "./DialOuter.svelte";
+	import Needle from "./Needle.svelte";
 
 	export let uniqueSlug = "";
 
@@ -9,6 +10,9 @@
 	export let min = 0;
 	export let max = 100;
 	export let main_dial_stops = 10;
+	export let value = -1;
+
+	let rotation = (value / (max - min)) * 180;
 
 	function getStopLabel(stop) {
 		let range = max - min;
@@ -155,5 +159,8 @@
 			{/each}
 		</ul>
 		<div class="circle circle--clip circle--inner-dial" />
+		{#if value >= 0}
+			<Needle title="Water quality is {value} ppb" {rotation} />
+		{/if}
 	</div>
 </div>

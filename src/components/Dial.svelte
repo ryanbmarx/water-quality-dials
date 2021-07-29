@@ -1,15 +1,15 @@
 <script>
 	// COMPONENTS
-	import Gauges from "./Gauges.svelte";
+	import Charts from "./Charts.svelte";
+	import Timestamp from "./Timestamp.svelte";
 
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
 
 	export let name = "";
 	export let description = "";
-	export let time = "2021-05-01";
 
-	export let value = 29;
+	export let value = 40;
 
 	export let min = 0;
 	export let max = 100;
@@ -21,7 +21,8 @@
 
 	export let uniqueSlug = slugify(name);
 
-	let timestamp = formatTimestamp(time);
+	export let updated = "";
+
 	let valueLabel = getValueLabel(value);
 
 	function getValueLabel(value) {
@@ -41,23 +42,13 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 		// Our number is super-duper high. Just return the largest value
 		return labels[labels.length - 1][0];
 	}
-
-	function formatTimestamp(time) {
-		try {
-			let t = new Date(time);
-			return `Water conditions: ${t.getUTCDate()}`;
-		} catch (e) {
-			// Invalid timestamp
-			return "";
-		}
-	}
 </script>
 
 <style>
 	.dial {
 		--color-outer-dial: #eee;
 		--color-outer-dial-highlight: rgba(0, 0, 0, 0.4);
-		--color-inner-dial: linear-gradient(to left, #3c2313, #2e6eb2);
+		--color-inner-dial: linear-gradient(to left, #3c2313, var(--color-blue-dark));
 		--color-background: #fff;
 
 		--inner-dial-width: 69%;
@@ -88,7 +79,6 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 	.label {
 		font-size: 1.15rem;
 		text-transform: uppercase;
-		display: block;
 		font-weight: bold;
 		background: var(--label-color, black);
 		color: white;
@@ -97,16 +87,22 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 		box-sizing: border-box;
 		padding: 0.5em 0.5em 0.4em 0.5em;
 		margin: 0 auto 0.5em auto;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
 		max-width: 50%;
+		min-height: 60px;
 	}
 
 	.value {
 		font-size: clamp(3rem, 2vw, 5rem);
+		line-height: 1.3em;
 		display: block;
 		font-weight: bold;
 		font-variant: small-caps;
 		color: var(--label-color, black);
-		max-width: 50%;
 
 		margin: 0 auto;
 	}
@@ -115,8 +111,8 @@ Main Stem: Good (0-6), Low Caution (7-8), High Caution (9-100)
 <div id={uniqueSlug} class="dial">
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
-	<Gauges {uniqueSlug} {average_min} {average_max} {min} {max} />
-	<span class="timestamp">{timestamp}</span>
+	<Charts {uniqueSlug} {average_min} {average_max} {min} {max} {value} />
+	<Timestamp {updated} />
 	<span class="label">{valueLabel}</span>
 	<span class="value">{value} ppb</span>
 </div>
