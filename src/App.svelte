@@ -1,21 +1,26 @@
 <script context="module">
-	export const contextKey = "water-dials-context";
+	// export const contextKey = "water-dials-context";
 </script>
 
 <script>
-	// import About from "./components/About.svelte";
 	import Dial from "./components/Dial.svelte";
+	import InputSelect from "./components/ui/InputSelect.svelte";
 
 	// UTILS
-	import { setContext } from "svelte";
-	import { writable } from "svelte/store";
 	import { createMediaStore } from "./utils/match-media.js";
+	import { slugify } from "./utils/slugify";
 
 	export let dials = [];
 
-	setContext(contextKey, {
-		isDesktop: writable(createMediaStore("(min-width:1024px)")),
+	let visibleBranch;
+	let options = dials.map(({ name }) => {
+		return {
+			label: name,
+			value: slugify(name),
+		};
 	});
+
+	const isMobile = createMediaStore("(max-width:1023px)");
 </script>
 
 <style>
@@ -26,7 +31,9 @@
 
 		--color-blue-dark: #274571;
 		--color-brown-dark: #3c2313;
+		--color-gray-dark: #444;
 		--color-gray: #888;
+		--color-gray-light: #eee;
 
 		--color-text: #222;
 		--color-accent: var(--color-blue-dark);
@@ -48,6 +55,12 @@
 		--inner-dial-width: 69%;
 		--outer-dial-width: 9px;
 		--stop-label-width: 20px;
+
+		/* MOBILE SELECT MENU */
+		--select-border-radius: 15px;
+		--select-color-background: var(--color-gray-light);
+		--select-input-height: 44px;
+		--select-carat-color: var(--color-text);
 
 		/* GAUGE / CANDLESTICK CHART */
 		--gauge-color-value: #235686;
@@ -81,9 +94,16 @@
 </style>
 
 <div class="water-quality">
+	{#if $isMobile}
+		<InputSelect
+			bind:value={visibleBranch}
+			{options}
+			showAll={false}
+			label="Choose a branch" />
+	{/if}
 	<div class="dials">
 		{#each dials as dial}
-			<Dial {...dial} />
+			<Dial visible={slugify(dial.name) === visibleBranch || !$isMobile} {...dial} />
 		{/each}
 	</div>
 </div>

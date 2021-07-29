@@ -8,6 +8,7 @@
 	import { slugify } from "../utils/slugify.js";
 	import { onMount } from "svelte";
 
+	export let visible;
 	export let name = "";
 	export let description = "";
 
@@ -58,6 +59,11 @@
 	.dial {
 		text-align: center;
 		box-sizing: border-box;
+		display: none;
+	}
+
+	.dial.visible {
+		display: block;
 	}
 
 	.stem {
@@ -113,7 +119,7 @@
 	}
 </style>
 
-<div id={uniqueSlug} class="dial">
+<div id={uniqueSlug} class="dial" class:visible>
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
 	<Charts
