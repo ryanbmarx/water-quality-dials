@@ -1,5 +1,5 @@
 <script context="module">
-	// export const contextKey = "water-dials-context";
+	export const contextKey = "water-dials-context";
 </script>
 
 <script>
@@ -9,6 +9,10 @@
 	// UTILS
 	import { createMediaStore } from "./utils/match-media.js";
 	import { slugify } from "./utils/slugify";
+
+	// STORES
+	import { writable } from "svelte/store";
+	import { setContext } from "svelte";
 
 	export let dials = [];
 
@@ -21,6 +25,11 @@
 	});
 
 	const isMobile = createMediaStore("(max-width:1023px)");
+	let fetchingData = writable(false);
+
+	setContext(contextKey, {
+		fetchingData,
+	});
 </script>
 
 <style>

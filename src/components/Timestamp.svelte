@@ -1,6 +1,5 @@
 <script>
 	import { format } from "date-fns-tz";
-	import { onMount, afterUpdate } from "svelte";
 
 	export let updated = "";
 
@@ -41,10 +40,6 @@
 			return "";
 		}
 	}
-
-	afterUpdate(() => {
-		console.log(updated);
-	});
 </script>
 
 <style>

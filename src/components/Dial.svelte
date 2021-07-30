@@ -3,10 +3,15 @@
 	import Charts from "./Charts.svelte";
 	import Timestamp from "./Timestamp.svelte";
 	import Gauge from "./Gauge.svelte";
+	import LoadingAnimation from "./ui/LoadingAnimation.svelte";
 
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
-	import { onMount } from "svelte";
+	import { getContext, onMount } from "svelte";
+
+	// CONTEXT AND STORES
+	import { setContext } from "svelte";
+	import { contextKey } from "../App.svelte";
 
 	export let visible;
 	export let name = "";
@@ -28,13 +33,14 @@
 
 	export let uniqueSlug = slugify(name);
 
+	const { fetchingData } = getContext(contextKey);
+
 	$: updated = "";
-	$: valueLabel = getValueLabel(value);
-	$: formattedValue = value ? `${value} ppb` : "-";
+	$: valueLabel = getValueLabel(value, fetchingData);
 
 	// Takes the thresholds as defined in the config data and finds the proper text label
-	function getValueLabel(value) {
-		if (!value) return "Loading ...";
+	function getValueLabel(value, $fetchingData) {
+		if (!value) return "Data not available";
 		for (let [text, maxBound] of labels) {
 			if (value <= maxBound) return text;
 		}
@@ -44,15 +50,18 @@
 	}
 
 	onMount(() => {
-		console.log("No data ...");
 		setTimeout(function () {
-			console.log("... DATA!");
-			value = 50;
-			average_low = 13;
-			average_high = 54;
-			high = 90;
-			low = 10;
-			updated = "2021-07-23T10:33:36.743";
+			$fetchingData = true;
+			setTimeout(function () {
+				$fetchingData = false;
+				console.log("... DATA!");
+				value = 50;
+				average_low = 13;
+				average_high = 54;
+				high = 90;
+				low = 10;
+				updated = "2021-07-23T10:33:36.743";
+			}, 2000);
 		}, 2000);
 	});
 </script>
@@ -62,6 +71,15 @@
 		text-align: center;
 		box-sizing: border-box;
 		display: none;
+		position: relative;
+	}
+
+	:global(.spinner) {
+		position: absolute !important;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 	}
 
 	.dial.visible {
@@ -97,7 +115,7 @@
 		max-width: 50%;
 		min-height: 60px;
 
-		opacity: 0.2;
+		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;
 	}
 
@@ -111,7 +129,7 @@
 		white-space: nowrap;
 		margin: 0 auto;
 
-		opacity: 0.2;
+		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;
 	}
 
@@ -134,7 +152,7 @@
 		{main_dial_stops} />
 	<Timestamp {updated} />
 	<span class:visible={value} class="label">{valueLabel}</span>
-	<span class:visible={value} class="value">{formattedValue}</span>
+	<span class:visible={value} class="value">{value} ppb</span>
 	<Gauge
 		{uniqueSlug}
 		{average_low}
@@ -145,4 +163,8 @@
 		{max}
 		{value}
 		{main_gauge_stops} />
+
+	{#if !value}
+		<LoadingAnimation text={$fetchingData ? "Refreshing data" : "Data not available"} />
+	{/if}
 </div>
