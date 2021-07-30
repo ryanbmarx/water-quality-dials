@@ -1,7 +1,3 @@
-<script context="module">
-	export const contextKey = "water-dials-context";
-</script>
-
 <script>
 	import Dial from "./components/Dial.svelte";
 	import InputSelect from "./components/ui/InputSelect.svelte";
@@ -13,6 +9,7 @@
 	// STORES
 	import { writable } from "svelte/store";
 	import { setContext } from "svelte";
+	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
 

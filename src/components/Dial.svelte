@@ -8,10 +8,7 @@
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
 	import { getContext, onMount } from "svelte";
-
-	// CONTEXT AND STORES
-	import { setContext } from "svelte";
-	import { contextKey } from "../App.svelte";
+	import { contextKey } from "../utils/context.js";
 
 	export let visible;
 	export let name = "";
