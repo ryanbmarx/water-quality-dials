@@ -1,5 +1,5 @@
-[
-	{
+{
+	"north": {
 		"value": 50,
 		"average_low": 13,
 		"average_high": 54,
@@ -7,7 +7,7 @@
 		"low": 10,
 		"updated": "2021-07-30T10:33:36.743"
 	},
-	{
+	"south": {
 		"value": 52,
 		"average_low": 10,
 		"average_high": 54,
@@ -15,7 +15,7 @@
 		"low": 10,
 		"updated": "2021-07-23T10:33:36.743"
 	},
-	{
+	"main": {
 		"value": 55,
 		"average_low": 10,
 		"average_high": 21,
@@ -23,4 +23,4 @@
 		"low": 10,
 		"updated": "2021-07-25T10:33:36.743"
 	}
-]
+}
