@@ -121,7 +121,7 @@
 	}
 </style>
 
-<div id={uniqueSlug} class="dial" class:visible>
+<div id={uniqueSlug} class="dial" class:visible aria-hidden={!visible}>
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
 	<Charts
@@ -133,8 +133,8 @@
 		{value}
 		{main_dial_stops} />
 	<Timestamp {updated} />
-	<span class:visible={value} class="label">{valueLabel}</span>
-	<span class:visible={value} class="value">{value} ppb</span>
+	<span class:visible={value} aria-hidden={!value} class="label">{valueLabel}</span>
+	<span class:visible={value} aria-hidden={!value} class="value">{value} ppb</span>
 	<Gauge
 		{uniqueSlug}
 		{average_low}

@@ -59,6 +59,6 @@
 	}
 </style>
 
-<span class="timestamp" class:visible={updated}>
+<span class="timestamp" class:visible={updated} aria-hidden={!updated}>
 	Water conditions: <time datetime={time.getTime()}>{timeFormatted}</time>
 </span>
