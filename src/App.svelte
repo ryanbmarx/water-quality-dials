@@ -8,16 +8,19 @@
 
 	// STORES
 	import { writable } from "svelte/store";
-	import { setContext } from "svelte";
+	import { onMount, setContext } from "svelte";
 	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
+	export let data_url = "https://ryanbmarx.github.io/water-quality-dials/data.json";
+	let data = {};
 
 	let visibleBranch;
-	let options = dials.map(({ name }) => {
+	let options = Object.keys(dials).map(key => {
+		const { name } = dials[key];
 		return {
 			label: name,
-			value: slugify(name),
+			value: key,
 		};
 	});
 
@@ -26,6 +29,16 @@
 
 	setContext(contextKey, {
 		fetchingData,
+	});
+
+	onMount(async () => {
+		try {
+			data = await fetch(data_url).then(response => response.json());
+			console.log(data);
+		} catch (e) {
+			console.error("!!! Trouble getting data");
+			console.error(e);
+		}
 	});
 </script>
 
@@ -110,8 +123,8 @@
 			label="Choose a branch" />
 	{/if}
 	<div class="dials" class:dials--grid={!$isMobile}>
-		{#each dials as dial}
-			<Dial visible={slugify(dial.name) === visibleBranch || !$isMobile} {...dial} />
+		{#each Object.entries(dials) as [id, dial]}
+			<Dial visible={id === visibleBranch || !$isMobile} {...dial} {...data[id]} />
 		{/each}
 	</div>
 </div>

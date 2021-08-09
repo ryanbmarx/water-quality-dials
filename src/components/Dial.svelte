@@ -7,7 +7,7 @@
 
 	// UTILS
 	import { slugify } from "../utils/slugify.js";
-	import { getContext, onMount } from "svelte";
+	import { getContext } from "svelte";
 	import { contextKey } from "../utils/context.js";
 
 	export let visible;
@@ -24,6 +24,7 @@
 	export let average_high;
 	export let high;
 	export let low;
+	export let updated = "";
 
 	// The scale of "badness"
 	export let labels = [];
@@ -45,22 +46,6 @@
 		// Our number is super-duper high. Just return the largest value
 		return labels[labels.length - 1][0];
 	}
-
-	onMount(() => {
-		setTimeout(function () {
-			$fetchingData = true;
-			setTimeout(function () {
-				$fetchingData = false;
-				console.log("... DATA!");
-				value = 50;
-				average_low = 13;
-				average_high = 54;
-				high = 90;
-				low = 10;
-				updated = "2021-07-23T10:33:36.743";
-			}, 2000);
-		}, 2000);
-	});
 </script>
 
 <style>
