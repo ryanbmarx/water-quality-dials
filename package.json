@@ -6,6 +6,7 @@
 	"scripts": {
 		"autobuild": "rollup -c -w",
 		"build": "rollup -c",
+		"data": "node ./functions/update.js",
 		"dev": "run-p start:dev autobuild",
 		"generate": "node ./functions/ssr.js",
 		"start": "sirv public --single",

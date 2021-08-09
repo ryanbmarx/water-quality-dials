@@ -1,0 +1,42 @@
+# Deploy the covid-map-reopening-america app to staging
+
+name: Update data for water dials
+
+# Controls when the action will run ... every 15 minutes
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [deploy-covid-map-reopening-america]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: covid-map-reopening-america
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "update"
+  update:
+    # The type of runner that the job will run on
+    runs-on: "macos-latest"
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      # install dependencies
+      - name: install
+        run: npm ci
+
+      # update data from our Google Spreadsheet
+      - name: update
+        env:
+          # GAPI_CLIENT_EMAIL: ${{ secrets.GAPI_CLIENT_EMAIL }}
+          # GAPI_PRIVATE_KEY: ${{ secrets.GAPI_PRIVATE_KEY }}
+        run: npm run data

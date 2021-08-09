@@ -12,7 +12,7 @@
 	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
-	export let data_url = "https://ryanbmarx.github.io/water-quality-dials/data.json";
+	export let data_url = "https://ryanbmarx.github.io/water-quality-dials/temp.json";
 	let data = {};
 
 	let visibleBranch;
