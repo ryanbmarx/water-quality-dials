@@ -37,6 +37,5 @@ jobs:
       # update data from our Google Spreadsheet
       - name: update
         env:
-          # GAPI_CLIENT_EMAIL: ${{ secrets.GAPI_CLIENT_EMAIL }}
-          # GAPI_PRIVATE_KEY: ${{ secrets.GAPI_PRIVATE_KEY }}
+          DATA_API_KEY: ${{ secrets.DATA_API_KEY }}
         run: npm run data

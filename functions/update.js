@@ -6,7 +6,7 @@ const fs = require("fs/promises");
 
 // Server-side renders the dials in a data-less/loading state
 async function update() {
-	let log = `++ Updating data at ${Date.now()}`;
+	let log = `++ Updating data at ${new Date()}`;
 	console.log(log);
 	return fs.writeFile("./data.json", JSON.stringify({ log }));
 }
