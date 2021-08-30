@@ -2,6 +2,7 @@
 	// COMPONENTS
 	import Charts from "./Charts.svelte";
 	import Timestamp from "./Timestamp.svelte";
+	import CSO from "./CSO.svelte";
 	import Gauge from "./Gauge.svelte";
 	import LoadingAnimation from "./ui/LoadingAnimation.svelte";
 
@@ -9,51 +10,66 @@
 	import { slugify } from "../utils/slugify.js";
 	import { getContext } from "svelte";
 	import { contextKey } from "../utils/context.js";
+	import { format } from "date-fns-tz";
 
 	export let visible;
 	export let name = "";
 	export let description = "";
 
+	// Default values for the gauges, how low and high should they go? And how many tick marks, etc.
 	export let min = 0;
 	export let max = 100;
 	export let main_dial_stops = 10;
 	export let main_gauge_stops = 5;
 
+	// Our caution-level values
+	export let caution;
+	// The lookup of human-readable texts for the caution level, i.e. "High caution"
+	export let labels = "";
+	export let cso = "";
+
+	// The featured value of the whole gauge
 	export let value;
-	export let average_low;
-	export let average_high;
+
+	// The average `value` for the gauge
+	export let average;
+
+	// The desired high and low value for a predetermined period of time.
 	export let high;
 	export let low;
-	export let updated = "";
 
-	// The scale of "badness"
-	export let labels = [];
+	// Timestamp... Data is as current as:
+	export let updated = "";
 
 	export let uniqueSlug = slugify(name);
 
 	const { fetchingData } = getContext(contextKey);
 
+	$: label = labels[caution];
 	$: updated = "";
-	$: valueLabel = getValueLabel(value, fetchingData);
-
-	// Takes the thresholds as defined in the config data and finds the proper text label
-	function getValueLabel(value, $fetchingData) {
-		if (!value) return "Data not available";
-		for (let [text, maxBound] of labels) {
-			if (value <= maxBound) return text;
-		}
-
-		// Our number is super-duper high. Just return the largest value
-		return labels[labels.length - 1][0];
-	}
 </script>
 
 <style>
 	.dial {
+		--color-accent: black;
+		--color-accent-text: white;
 		text-align: center;
 		box-sizing: border-box;
 		display: none;
 		position: relative;
+	}
+
+	:global(.dial.dial--high) {
+		--color-accent: var(--color-high);
+		--color-accent-text: var(--color-high-text);
+	}
+	:global(.dial.dial--low) {
+		--color-accent: var(--color-low);
+		--color-accent-text: var(--color-low-text);
+	}
+	:global(.dial.dial--good) {
+		--color-accent: var(--color-good);
+		--color-accent-text: var(--color-good-text);
 	}
 
 	:global(.spinner) {
@@ -82,12 +98,12 @@
 		font-size: 1.15rem;
 		text-transform: uppercase;
 		font-weight: bold;
-		background: var(--label-color, black);
-		color: white;
+		background: var(--color-accent);
+		color: var(--color-accent-text);
 		text-align: center;
 
 		box-sizing: border-box;
-		padding: 0.5em 0.5em 0.4em 0.5em;
+		padding: 0.25em 0.5em 0.2em 0.5em;
 		margin: 0 auto 0.5em auto;
 
 		display: flex;
@@ -103,11 +119,11 @@
 
 	.value {
 		font-size: clamp(3rem, 2vw, 5rem);
-		line-height: 1.3em;
+		line-height: 1em;
 		display: block;
 		font-weight: bold;
 		font-variant: small-caps;
-		color: var(--label-color, black);
+		color: var(--color-accent);
 		white-space: nowrap;
 		margin: 0 auto;
 
@@ -121,31 +137,15 @@
 	}
 </style>
 
-<div id={uniqueSlug} class="dial" class:visible aria-hidden={!visible}>
+<div id={uniqueSlug} class="dial dial--{caution}" class:visible aria-hidden={!visible}>
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
-	<Charts
-		{uniqueSlug}
-		{average_low}
-		{average_high}
-		{min}
-		{max}
-		{value}
-		{main_dial_stops} />
+	<Charts {uniqueSlug} {average} {min} {max} {value} {main_dial_stops} />
 	<Timestamp {updated} />
-	<span class:visible={value} aria-hidden={!value} class="label">{valueLabel}</span>
+	<span class:visible={value} aria-hidden={!value} class="label">{label}</span>
 	<span class:visible={value} aria-hidden={!value} class="value">{value} ppb</span>
-	<Gauge
-		{uniqueSlug}
-		{average_low}
-		{average_high}
-		{high}
-		{low}
-		{min}
-		{max}
-		{value}
-		{main_gauge_stops} />
-
+	<CSO {cso} />
+	<Gauge {uniqueSlug} {average} {high} {low} {min} {max} {value} {main_gauge_stops} />
 	{#if !value}
 		<LoadingAnimation text={$fetchingData ? "Refreshing data" : "Data not available"} />
 	{/if}

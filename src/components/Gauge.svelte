@@ -6,8 +6,7 @@
 	export let main_gauge_stops;
 	export let value;
 
-	export let average_high;
-	export let average_low;
+	export let average;
 	export let high;
 	export let low;
 
@@ -15,12 +14,11 @@
 	let range = max - min;
 	let increment = range / main_gauge_stops;
 
+	// These values are the CSS percentages used to place the icons on the gauge
 	$: placeHigh = ((high - min) / range) * 100;
 	$: placeLow = ((low - min) / range) * 100;
 	$: placeValue = ((value - min) / range) * 100;
-
-	$: placeAvgLow = ((average_low - min) / range) * 100;
-	$: avgWidth = ((average_high - min) / range) * 100 - placeAvgLow;
+	$: placeAvg = ((average - min) / range) * 100;
 
 	const DEFAULT_LABEL_TEXT = "-";
 
@@ -48,6 +46,7 @@
 
 <style>
 	.gauge {
+		--tick-width: 1em;
 		margin: 2em 0;
 		width: calc(100% - 2em);
 		margin: auto;
@@ -72,14 +71,14 @@
 		background: #aaa;
 	}
 
-	.tick {
+	/* .tick {
 		display: inline-block;
 		width: 2px;
 		height: 1.2em;
 		background: black;
 		z-index: 2;
-	}
-
+	} */
+	/* 
 	.average {
 		display: inline-block;
 		z-index: 2;
@@ -89,37 +88,42 @@
 		background: var(--gauge-color-value);
 		max-height: 2em;
 		opacity: 0.9;
-	}
+	} */
 
-	.gauge__chart .average {
-		height: 100%;
-		position: absolute;
-		top: 0;
+	.tick {
 		display: block;
-	}
-	.gauge__chart .tick {
-		display: block;
-		height: 100%;
+		height: var(--tick-width);
+		width: var(--tick-width);
+		background: var(--color-accent);
+		border: 1px solid var(--color-accent-text);
+
 		position: absolute;
-		top: 0;
-		transform: translate(-50%, 0);
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 2;
 	}
 
-	.tick--value {
-		background: var(--gauge-color-value);
-	}
-	.tick--high {
-		background: var(--gauge-color-high);
+	.tick.tick--average {
+		transform: translate(-50%, -50%) rotate(45deg) scale(0.82);
 	}
 
-	.tick--low {
-		background: var(--gauge-color-low);
+	.tick.tick--value {
+		border-radius: 50%;
+	}
+	.tick.tick--high {
+		clip-path: polygon(0 100%, 50% 0, 100% 100%);
 	}
 
 	.legend {
+		list-style: none;
 		margin: 1em 0 0 0;
 		padding: 0;
-		list-style: none;
+		/* Adjust for our transformed shapes, so they are left aligned. */
+		padding-left: calc(0.5 * var(--tick-width));
+
+		display: grid;
+		grid-template: repeat(2, minmax(1px, 1fr)) / repeat(2, minmax(1px, 1fr));
+		gap: 8px 0;
 	}
 
 	.legend li {
@@ -127,6 +131,10 @@
 		gap: 8px;
 		align-items: center;
 		margin: 0 0 8px 0;
+		position: relative;
+	}
+	.legend__text {
+		padding-left: calc(var(--tick-width) / 2 + 0.25em);
 	}
 
 	.stops {
@@ -156,8 +164,8 @@
 		{/each}
 	</ul>
 	<div class="gauge__chart">
-		{#if average_low && average_high}
-			<span style="left: {placeAvgLow}%; width: {avgWidth}%" class="average" />
+		{#if average}
+			<span style="left: {placeAvg}%;" class="tick tick--average" />
 		{/if}
 		{#if high}
 			<span style="left: {placeHigh}%" class="tick tick--high" />
@@ -170,25 +178,25 @@
 		{/if}
 	</div>
 	<ul class="legend">
-		<li>
-			<span class="average" />
-			{#if average_low && average_high}
-				Average: {average_low}-{average_high} ppb
+		<li class="legend__item">
+			<span class="tick tick--average" />
+			{#if average}
+				<span class="legend__text">Average: {average} ppb</span>
 			{:else}
-				Average: {DEFAULT_LABEL_TEXT}
+				<span class="legend__text">Average: {DEFAULT_LABEL_TEXT}</span>
 			{/if}
 		</li>
 		<li>
 			<span class="tick tick--high" />
-			High: {getLabel(high)}
+			<span class="legend__text">High: {getLabel(high)}</span>
 		</li>
 		<li>
 			<span class="tick tick--low" />
-			Low: {getLabel(low)}
+			<span class="legend__text">Low: {getLabel(low)}</span>
 		</li>
 		<li>
 			<span class="tick tick--value" />
-			Latest: {getLabel(value)}
+			<span class="legend__text">Latest: {getLabel(value)}</span>
 		</li>
 	</ul>
 </div>

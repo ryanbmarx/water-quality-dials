@@ -12,8 +12,8 @@
 	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
-	export let data_url = "https://ryanbmarx.github.io/water-quality-dials/temp.json";
-	let data = {};
+	export let data_url = "http://localhost:5000/temp2.json";
+	let data = writable({});
 
 	let visibleBranch;
 	let options = Object.keys(dials).map(key => {
@@ -27,14 +27,21 @@
 	const isMobile = createMediaStore("(max-width:1023px)");
 	let fetchingData = writable(false);
 
+	let labels = {
+		good: "Good",
+		low: "Low caution",
+		high: "High caution",
+	};
+
 	setContext(contextKey, {
 		fetchingData,
 	});
 
 	onMount(async () => {
 		try {
-			data = await fetch(data_url).then(response => response.json());
-			console.log(data);
+			// Fetch our data, then replace our empty data var with it. This will cause the dials to "click" into place.
+			$data = await fetch(data_url).then(response => response.json());
+			console.log($data);
 		} catch (e) {
 			console.error("!!! Trouble getting data");
 			console.error(e);
@@ -54,8 +61,14 @@
 		--color-gray: #888;
 		--color-gray-light: #eee;
 
+		--color-high: #8c6239;
+		--color-low: #737373;
+		--color-good: #00578a;
+		--color-high-text: #ffffff;
+		--color-low-text: #ffffff;
+		--color-good-text: #ffffff;
+
 		--color-text: #222;
-		--color-accent: var(--color-blue-dark);
 
 		/* UI STUFF */
 		--arrow-length: 15px;
@@ -64,11 +77,7 @@
 		/* DIALS */
 		--color-outer-dial: #eee;
 		--color-outer-dial-highlight: rgba(0, 0, 0, 0.4);
-		--color-inner-dial: linear-gradient(
-			to left,
-			var(--color-brown-dark),
-			var(--color-blue-dark)
-		);
+		--color-inner-dial: linear-gradient(to left, var(--color-high), var(--color-good));
 		--color-background: #fff;
 
 		--inner-dial-width: 69%;
@@ -124,7 +133,11 @@
 	{/if}
 	<div class="dials" class:dials--grid={!$isMobile}>
 		{#each Object.entries(dials) as [id, dial]}
-			<Dial visible={id === visibleBranch || !$isMobile} {...dial} {...data[id]} />
+			<Dial
+				visible={id === visibleBranch || !$isMobile}
+				{...dial}
+				{...$data[id]}
+				{labels} />
 		{/each}
 	</div>
 </div>

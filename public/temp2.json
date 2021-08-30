@@ -1,0 +1,27 @@
+{
+	"north": {
+		"value": 50,
+		"average": 54,
+		"high": 90,
+		"low": 10,
+		"updated": "2021-07-30T10:33:36.743",
+		"caution": "high"
+	},
+	"south": {
+		"value": 52,
+		"average": 24,
+		"high": 90,
+		"low": 10,
+		"updated": "2021-07-23T10:33:36.743",
+		"cso": "2021-07-13T10:33:36.743",
+		"caution": "good"
+	},
+	"main": {
+		"value": 55,
+		"average": 21,
+		"high": 90,
+		"low": 10,
+		"caution": "low",
+		"updated": "2021-07-25T10:33:36.743"
+	}
+}

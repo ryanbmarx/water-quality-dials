@@ -1,10 +1,10 @@
 <script>
 	import { format } from "date-fns-tz";
 
-	export let updated = "";
+	export let cso = "";
 
-	const DATE_FORMAT = "d, yyyy";
-	const TIME_FORMAT = "h:mm aa zzz";
+	const DATE_FORMAT = "d";
+	const TIME_FORMAT = "h:mm aa";
 	const AP_MONTHS = [
 		"Jan.",
 		"Feb.",
@@ -20,11 +20,10 @@
 		"Dec.",
 	];
 
-	$: time = new Date(updated) || "";
+	$: time = new Date(cso) || "";
 	$: timeFormatted = formatTime(time);
 
 	function formatTime(u) {
-		if (!updated) return;
 		try {
 			let date = format(u, DATE_FORMAT);
 			let time = format(u, TIME_FORMAT);
@@ -34,30 +33,28 @@
 
 			return formatted;
 		} catch (e) {
-			// Invalid timestamp
-			console.error(e);
+			// Invalid timestamp. Acknowledge and move on
 			return "";
 		}
 	}
 </script>
 
 <style>
-	.timestamp {
+	.cso {
+		color: var(--color-accent);
+		font-weight: bold;
 		display: block;
 		margin: 0 auto 0.5em auto;
 		max-width: 50%;
 		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;
-
-		/* Timestamp probably will be ~3 lines, at 1.3em per line. This (hopefully) keeps reflows down */
-		min-height: 4em;
 	}
 
-	.timestamp.visible {
+	.cso.visible {
 		opacity: 1;
 	}
 </style>
 
-<span class="timestamp" class:visible={updated} aria-hidden={!updated}>
-	Water conditions: <time datetime={time.getTime()}>{timeFormatted}</time>
+<span class="cso" class:visible={cso} aria-hidden={!time}>
+	CSO, <time datetime={time.getTime()}>{timeFormatted}</time>
 </span>
