@@ -3,11 +3,6 @@
 		"main": {
 			"name": "Main stem",
 			"description": "Near Michigan Avenue",
-			"labels": [
-				["Good", 6],
-				["Low Caution", 9],
-				["High Caution", 100]
-			],
 			"min": 0,
 			"max": 100,
 			"main_dial_stops": 10,
@@ -16,11 +11,6 @@
 		"north": {
 			"name": "North Branch",
 			"description": "Near Goose Island",
-			"labels": [
-				["Good", 33],
-				["Low Caution", 54],
-				["High Caution", 100]
-			],
 			"min": 0,
 			"max": 100,
 			"main_dial_stops": 10,
@@ -29,21 +19,10 @@
 		"south": {
 			"name": "South Branch",
 			"description": "Near Eleanor Boat House",
-			"labels": [
-				["Good", 28],
-				["Low Caution", 38],
-				["High Caution", 100]
-			],
 			"min": 0,
 			"max": 100,
 			"main_dial_stops": 10,
 			"main_gauge_stops": 5
 		}
-	},
-	"about": {
-		"link": "https://www.google.com",
-		"label": "Our data explained",
-		"blurb": "Gauges show readings of tryptophan-like-fluorescence (TLF) in parts per billion of tryptophan, taken every 15 minutes by sensors in the water. TLF is a promising indicator of how many microbes are present. Higher readings mean more tryptophan was detected and that water quality is likely poorer"
-	},
-	"headline": "Tryptophan levels in the three Chicago river branches"
+	}
 }

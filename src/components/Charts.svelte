@@ -2,11 +2,11 @@
 	import DialOuter from "./DialOuter.svelte";
 	import Needle from "./Needle.svelte";
 
+	// So we can set IDs on things, and still have them be unique values, like good HTML
 	export let uniqueSlug = "";
 
-	export let average_low;
-	export let average_high;
-
+	// See Dial.svelte for the definitions
+	export let average;
 	export let min;
 	export let max;
 	export let main_dial_stops;
@@ -147,7 +147,7 @@
 
 <div class="chart">
 	<div class="circles">
-		<DialOuter {min} {max} start={average_low} end={average_high} {uniqueSlug} />
+		<DialOuter {average} {uniqueSlug} {min} {max} />
 		<div class="circle circle--clip circle--inner-bg" />
 		<ul class="stops">
 			{#each Array(main_dial_stops + 1) as _, stop}

@@ -3,10 +3,16 @@
 
 	export let min;
 	export let max;
-	let range = max - min;
+	let range = parseInt(max) - parseInt(min);
 
-	export let start;
-	export let end;
+	// This is the value we want to display
+	export let average;
+
+	// Let's take a little below and a little above
+	// It's a little imprecise, yes, but we need
+	// some pixels to display
+	$: start = parseInt(average) - 0.5;
+	$: end = parseInt(average) + 0.5;
 
 	// Make sure our numbers are not outside the range
 	$: startValue = start < min ? min : start;
@@ -62,14 +68,11 @@
 	.cover {
 		fill: var(--color-outer-dial);
 		transform: rotate(-90deg);
-		transition: transform calc(2 * var(--fade-in-speed)) ease;
-		transition-delay: var(--fade-in-speed);
 	}
 
 	.highlight {
 		fill: var(--color-outer-dial-highlight);
 		transform: rotate(-90deg);
-		transition: transform calc(2 * var(--fade-in-speed)) ease;
 	}
 
 	.highlight.visible {
@@ -115,6 +118,12 @@
 		line-height: 1.3em;
 		color: var(--color-gray);
 	}
+
+	@media all and (prefers-reduced-motion: no-preference) {
+		.highlight {
+			transition: transform calc(2 * var(--fade-in-speed)) ease;
+		}
+	}
 </style>
 
 <div
@@ -125,10 +134,10 @@
 		class="circle--outer-dial__highlight"
 		viewBox="{-0.5 * width} {-0.5 * height} {width} {height}"
 		xmlns="http://www.w3.org/2000/svg">
-		<path class:visible={start && end} class="highlight" d={d(highlightPercent)} />
-		<path class:visible={start && end} class="cover" d={d(coverPercent)} />
+		<path class:visible={average} class="highlight" d={d(highlightPercent)} />
+		<path class:visible={average} class="cover" d={d(coverPercent)} />
 	</svg>
 </div>
 <p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end}>
-	Average for last month: <strong>{start}-{end} ppb</strong>
+	Average for last month: <strong>{average} ppb</strong>
 </p>
