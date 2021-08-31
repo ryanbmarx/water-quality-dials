@@ -4,11 +4,10 @@
 
 	// UTILS
 	import { createMediaStore } from "./utils/match-media.js";
-	import { slugify } from "./utils/slugify";
 
 	// STORES
 	import { writable } from "svelte/store";
-	import { onMount, setContext } from "svelte";
+	import { afterUpdate, onMount, setContext } from "svelte";
 	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
@@ -136,81 +135,85 @@
 				}
 			})
 			.catch(console.error);
-		Promise.all([
-			fetch(MAIN_STEM)
-				.then(r => r.json())
-				.then(data => {
-					let tagsList = data?.data?.dataModel?.tagsList;
-					if (tagsList) {
-						for (let tag of tagsList) {
-							const { title, value } = tag;
-							switch (title) {
-								case "Last Hour Average":
-									if (value) {
-										$gaugeData.main.value = value;
-										$gaugeData.main.caution = getCaution("main", value, csoEvents);
-									}
-									break;
-								case "Last Month Average":
-									if (value) $gaugeData.main.average = value;
-									break;
-								case "Last Month Maximum":
-									if (value) $gaugeData.main.high = value;
-									break;
-								case "Last Month Minimum":
-									if (value) $gaugeData.main.low = value;
-									break;
-							}
+
+		fetch(MAIN_STEM)
+			.then(r => r.json())
+			.then(data => {
+				let tagsList = data?.data?.dataModel?.tagsList;
+				if (tagsList) {
+					for (let tag of tagsList) {
+						const { title, value } = tag;
+						switch (title) {
+							case "Last Hour Average":
+								if (value) {
+									$gaugeData.main.value = value;
+									$gaugeData.main.caution = getCaution("main", value, csoEvents);
+								}
+								break;
+							case "Last Month Average":
+								if (value) $gaugeData.main.average = value;
+								break;
+							case "Last Month Maximum":
+								if (value) $gaugeData.main.high = value;
+								break;
+							case "Last Month Minimum":
+								if (value) $gaugeData.main.low = value;
+								break;
 						}
 					}
-				})
-				.catch(console.error),
-			// Also do the NORTH/SOUTH
-			fetch(NORTH_AND_SOUTH)
-				.then(r => r.json())
-				.then(data => {
-					let tagsList = data?.data?.dataModel?.tagsList;
-					if (tagsList) {
-						for (let tag of tagsList) {
-							const { title, value } = tag;
-							switch (title) {
-								case "NB Last Hour Average":
-									if (value) {
-										$gaugeData.north.value = value;
-										$gaugeData.north.caution = getCaution("north", value, csoEvents);
-									}
-									break;
-								case "NB Last Month Average":
-									if (value) $gaugeData.north.average = value;
-									break;
-								case "NB Last Month Maximum":
-									if (value) $gaugeData.north.high = value;
-									break;
-								case "NB Last Month Minimum":
-									if (value) $gaugeData.north.low = value;
-									break;
-								case "SB Last Hour Average":
-									if (value) {
-										$gaugeData.south.value = value;
-										$gaugeData.south.caution = getCaution("south", value, csoEvents);
-									}
-									break;
-								case "SB Last Month Average":
-									if (value) $gaugeData.south.average = value;
-									break;
-								case "SB Last Month Maximum":
-									if (value) $gaugeData.south.high = value;
-									break;
-								case "SB Last Month Minimum":
-									if (value) $gaugeData.south.low = value;
-									break;
-							}
+				}
+			})
+			.catch(console.error);
+		// Also do the NORTH/SOUTH
+		fetch(NORTH_AND_SOUTH)
+			.then(r => r.json())
+			.then(data => {
+				let tagsList = data?.data?.dataModel?.tagsList;
+				if (tagsList) {
+					for (let tag of tagsList) {
+						const { title, value } = tag;
+						switch (title) {
+							case "NB Last Hour Average":
+								if (value) {
+									$gaugeData.north.value = value;
+									$gaugeData.north.caution = getCaution("north", value, csoEvents);
+								}
+								break;
+							case "NB Last Month Average":
+								if (value) $gaugeData.north.average = value;
+								break;
+							case "NB Last Month Maximum":
+								if (value) $gaugeData.north.high = value;
+								break;
+							case "NB Last Month Minimum":
+								if (value) $gaugeData.north.low = value;
+								break;
+							case "SB Last Hour Average":
+								if (value) {
+									$gaugeData.south.value = value;
+									$gaugeData.south.caution = getCaution("south", value, csoEvents);
+								}
+								break;
+							case "SB Last Month Average":
+								if (value) $gaugeData.south.average = value;
+								break;
+							case "SB Last Month Maximum":
+								if (value) $gaugeData.south.high = value;
+								break;
+							case "SB Last Month Minimum":
+								if (value) $gaugeData.south.low = value;
+								break;
 						}
 					}
-				})
-				.catch(console.error),
-		]);
-		$fetchingData = false;
+				}
+			})
+			.catch(console.error);
+	});
+
+	afterUpdate(() => {
+		// Update the iframe height
+		if (typeof window != "undefined") window?.pymChild?.sendHeight();
+		console.log("Update");
 	});
 </script>
 
@@ -267,11 +270,7 @@
 		max-width: 1330px;
 		margin: 2em auto;
 	}
-	/* .headline {
-		text-align: center;
-		font: bold clamp(1.3em, 6vw, 2em) / 1.3em var(--fonts);
-		margin-bottom: 1em;
-	} */
+
 	.dials {
 		display: grid;
 		gap: var(--grid-gap) calc(var(--grid-gap) * 2);
@@ -286,6 +285,10 @@
 	.dials > :global(*) {
 		flex: 1 1 250px;
 	}
+
+	.water-quality :global(.select) {
+		margin-bottom: 16px;
+	}
 </style>
 
 <div class="water-quality">
@@ -294,6 +297,9 @@
 			bind:value={visibleBranch}
 			{options}
 			showAll={false}
+			on:input={e => {
+				if (typeof window != "undefined") window?.pymChild?.sendHeight();
+			}}
 			label="Choose a branch" />
 	{/if}
 	<div class="dials" class:dials--grid={!$isMobile}>
