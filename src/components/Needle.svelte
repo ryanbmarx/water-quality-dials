@@ -20,10 +20,6 @@
 		transform-origin: 86% center;
 		transition: transform var(--fade-in-speed) ease;
 	}
-
-	circle {
-		fill: white;
-	}
 </style>
 
 <svg
