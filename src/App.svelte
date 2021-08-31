@@ -31,11 +31,11 @@
 	let fetchingData = writable(false);
 
 	const MAIN_STEM =
-		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/main-stem/1";
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/main-stem/latest";
 	const NORTH_AND_SOUTH =
-		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/north-south/1";
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/north-south/latest";
 	const CSO =
-		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/all-branches/cso-event/1";
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/all-branches/cso-event/latest";
 
 	let labels = {
 		good: "Good",
@@ -142,12 +142,13 @@
 				let tagsList = data?.data?.dataModel?.tagsList;
 				if (tagsList) {
 					for (let tag of tagsList) {
-						const { title, value } = tag;
+						const { title, value, dateRange } = tag;
 						switch (title) {
 							case "Last Hour Average":
 								if (value) {
 									$gaugeData.main.value = value;
 									$gaugeData.main.caution = getCaution("main", value, csoEvents);
+									$gaugeData.main.updated = dateRange.to;
 								}
 								break;
 							case "Last Month Average":
@@ -171,12 +172,13 @@
 				let tagsList = data?.data?.dataModel?.tagsList;
 				if (tagsList) {
 					for (let tag of tagsList) {
-						const { title, value } = tag;
+						const { title, value, dateRange } = tag;
 						switch (title) {
 							case "NB Last Hour Average":
 								if (value) {
 									$gaugeData.north.value = value;
 									$gaugeData.north.caution = getCaution("north", value, csoEvents);
+									$gaugeData.north.updated = dateRange.to;
 								}
 								break;
 							case "NB Last Month Average":
@@ -192,6 +194,7 @@
 								if (value) {
 									$gaugeData.south.value = value;
 									$gaugeData.south.caution = getCaution("south", value, csoEvents);
+									$gaugeData.south.updated = dateRange.to;
 								}
 								break;
 							case "SB Last Month Average":
@@ -213,7 +216,6 @@
 	afterUpdate(() => {
 		// Update the iframe height
 		if (typeof window != "undefined") window?.pymChild?.sendHeight();
-		console.log("Update");
 	});
 </script>
 
@@ -268,14 +270,14 @@
 		font-size: 1rem;
 		line-height: 1.3em;
 		max-width: 1330px;
-		margin: 2em auto;
+		margin: 0;
 	}
 
 	.dials {
 		display: grid;
 		gap: var(--grid-gap) calc(var(--grid-gap) * 2);
 		grid-template-columns: minmax(1px, 1fr);
-		margin: 1em 0;
+		margin: 0;
 	}
 
 	.dials--grid {

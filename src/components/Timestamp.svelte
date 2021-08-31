@@ -4,7 +4,8 @@
 	export let updated = "";
 
 	const DATE_FORMAT = "d, yyyy";
-	const TIME_FORMAT = "h:mm aa zzz";
+	// const TIME_FORMAT = "h:mm aa zzz";
+	const TIME_FORMAT = "h:mm aa";
 	const AP_MONTHS = [
 		"Jan.",
 		"Feb.",
@@ -49,8 +50,8 @@
 		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;
 
-		/* Timestamp probably will be ~3 lines, at 1.3em per line. This (hopefully) keeps reflows down */
-		min-height: 4em;
+		/* Timestamp probably will be ~2 lines, at 1.3em per line. This (hopefully) keeps reflows down */
+		min-height: 3em;
 	}
 
 	.timestamp.visible {
@@ -59,5 +60,5 @@
 </style>
 
 <span class="timestamp" class:visible={updated} aria-hidden={!updated}>
-	Water conditions: <time datetime={time.getTime()}>{timeFormatted}</time>
+	Water conditions:<br /><time datetime={time.getTime()}>{timeFormatted}</time>
 </span>
