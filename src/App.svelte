@@ -74,17 +74,6 @@
 		fetchingData,
 	});
 
-	/*
-		"main": {
-		"value": 55,
-		"average": 21,
-		"high": 90,
-		"low": 10,
-		"caution": "low",
-		"updated": "2021-07-25T10:33:36.743"
-	}
-	*/
-
 	onMount(async () => {
 		$fetchingData = true;
 		// Do the main
@@ -139,7 +128,7 @@
 		fetch(MAIN_STEM)
 			.then(r => r.json())
 			.then(data => {
-				let tagsList = data?.data?.dataModel?.tagsList;
+				const { tagsList } = data?.data?.dataModel;
 				if (tagsList) {
 					for (let tag of tagsList) {
 						const { title, value, dateRange } = tag;
@@ -148,7 +137,6 @@
 								if (value) {
 									$gaugeData.main.value = value;
 									$gaugeData.main.caution = getCaution("main", value, csoEvents);
-									$gaugeData.main.updated = dateRange.to;
 								}
 								break;
 							case "Last Month Average":
@@ -162,6 +150,10 @@
 								break;
 						}
 					}
+				}
+
+				if (data.timestamp) {
+					$gaugeData.main.updated = data.timestamp;
 				}
 			})
 			.catch(console.error);
@@ -208,6 +200,11 @@
 								break;
 						}
 					}
+				}
+
+				if (data.timestamp) {
+					$gaugeData.north.updated = data.timestamp;
+					$gaugeData.south.updated = data.timestamp;
 				}
 			})
 			.catch(console.error);
