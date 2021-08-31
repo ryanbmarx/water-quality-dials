@@ -46,7 +46,6 @@
 	const { fetchingData } = getContext(contextKey);
 
 	$: label = labels[caution];
-	$: updated = "";
 </script>
 
 <style>
