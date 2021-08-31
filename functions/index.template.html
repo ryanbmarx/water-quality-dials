@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    <script async src="https://pym.nprapps.org/pym.v1.min.js"></script>
+    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
     <link rel="stylesheet" href="dials.min.css" />
 
     <title>Water quality of the Chicago River</title>
@@ -22,7 +22,10 @@
 <body>
     <!-- CONTENT -->
     <script>
-        var pymChild = new pym.Child();
+        document.addEventListener("DOMContentLoaded", function (e) {
+            var pymChild = new pym.Child();
+            window.pymChild = pymChild;
+        })
     </script>
     <script defer src="dials.min.js"></script>
 </body>
