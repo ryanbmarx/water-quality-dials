@@ -30,6 +30,8 @@
 	const isMobile = createMediaStore("(max-width:1023px)");
 	let fetchingData = writable(false);
 
+	// CSO timespan for high caution, in hours
+	const CSO_DURATION = 72;
 	const MAIN_STEM =
 		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/main-stem/latest";
 	const NORTH_AND_SOUTH =
@@ -91,9 +93,11 @@
 						if (title.toLowerCase().includes("downstream")) {
 							try {
 								let csoDate = new Date(valueDate);
-								// If the time of the last CSO was less than 48 hours ago, store the date
+								// If the time of the last CSO was less than 3 days ago, store the date
 								acc.south =
-									(today - csoDate) / 1000 / 60 / 60 > 48 ? "" : new Date(valueDate);
+									(today - csoDate) / 1000 / 60 / 60 > CSO_DURATION
+										? ""
+										: new Date(valueDate);
 							} catch (e) {
 								// This is not a valid date. Ignore it.
 								acc.south = "";
@@ -103,7 +107,9 @@
 								let csoDate = new Date(valueDate);
 								// If the time of the last CSO was less than 72 hours ago, store the date
 								acc.north =
-									(today - csoDate) / 1000 / 60 / 60 > 72 ? "" : new Date(valueDate);
+									(today - csoDate) / 1000 / 60 / 60 > CSO_DURATION
+										? ""
+										: new Date(valueDate);
 							} catch (e) {
 								// This is not a valid date. Ignore it.
 								acc.north = "";
@@ -111,9 +117,11 @@
 						} else if (title.toLowerCase().includes("ms")) {
 							try {
 								let csoDate = new Date(valueDate);
-								// If the time of the last CSO was less than 24 hours ago, store the date
+								// If the time of the last CSO was less than 72 hours ago, store the date
 								acc.main =
-									(today - csoDate) / 1000 / 60 / 60 > 24 ? "" : new Date(valueDate);
+									(today - csoDate) / 1000 / 60 / 60 > CSO_DURATION
+										? ""
+										: new Date(valueDate);
 							} catch (e) {
 								// This is not a valid date. Ignore it.
 								acc.main = "";
