@@ -1,7 +1,7 @@
 {
 	"dials": {
 		"main": {
-			"name": "Main stem",
+			"name": "Main Stem",
 			"description": "Near Michigan Avenue",
 			"min": 0,
 			"max": 100,
