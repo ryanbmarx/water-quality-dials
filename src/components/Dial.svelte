@@ -111,7 +111,7 @@
 		justify-content: center;
 		width: 100%;
 		max-width: 50%;
-		min-height: 60px;
+		min-height: 2em;
 
 		opacity: 0;
 		transition: opacity var(--fade-in-speed) ease;

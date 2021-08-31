@@ -1,11 +1,9 @@
 <script>
-	import { afterUpdate } from "svelte";
-
 	export let uniqueSlug = "";
 
 	export let min;
 	export let max;
-	let range = max - min;
+	let range = parseInt(max) - parseInt(min);
 
 	// This is the value we want to display
 	export let average;
@@ -13,8 +11,8 @@
 	// Let's take a little below and a little above
 	// It's a little imprecise, yes, but we need
 	// some pixels to display
-	$: start = average - 0.5;
-	$: end = average + 0.5;
+	$: start = parseInt(average) - 0.5;
+	$: end = parseInt(average) + 0.5;
 
 	// Make sure our numbers are not outside the range
 	$: startValue = start < min ? min : start;
