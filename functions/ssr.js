@@ -36,18 +36,15 @@ async function render() {
 		.replace("<!-- HTML -->", html)
 		.replace("// SETTINGS", settings);
 
-	// Write our rendered graphic to a file, for easy copy/pasting
-	fs.writeFile(
-		"./public/dials.html",
-		minify(rendered, {
+	// Make a simple, stub of an index page using our rendered graphic
+	const renderedIndex = indexTemplate.replace("<!-- CONTENT -->", rendered);
+	return fs.writeFile(
+		"./public/index.html",
+		minify(renderedIndex, {
 			removeAttributeQuotes: true,
 			collapseWhitespace: true,
 		})
 	);
-
-	// Make a simple, stub of an index page using our rendered graphic
-	const renderedIndex = indexTemplate.replace("<!-- CONTENT -->", rendered);
-	return fs.writeFile("./public/index.html", renderedIndex);
 }
 if (require.main === module) {
 	render();

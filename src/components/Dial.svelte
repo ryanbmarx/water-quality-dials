@@ -25,7 +25,7 @@
 	// Our caution-level values
 	export let caution;
 	// The lookup of human-readable texts for the caution level, i.e. "High caution"
-	export let labels = "";
+	export let labels = {};
 	export let cso = "";
 
 	// The featured value of the whole gauge

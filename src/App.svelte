@@ -12,8 +12,11 @@
 	import { contextKey } from "./utils/context.js";
 
 	export let dials = [];
-	export let data_url = "http://localhost:5000/temp2.json";
-	let data = writable({});
+	let gaugeData = writable({
+		main: {},
+		north: {},
+		south: {},
+	});
 
 	let visibleBranch;
 	let options = Object.keys(dials).map(key => {
@@ -23,9 +26,17 @@
 			value: key,
 		};
 	});
-
+	// A lookup of CSO dates
+	let csoEvents = {};
 	const isMobile = createMediaStore("(max-width:1023px)");
 	let fetchingData = writable(false);
+
+	const MAIN_STEM =
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/main-stem/1";
+	const NORTH_AND_SOUTH =
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/tryptophan/north-south/1";
+	const CSO =
+		"https://dvlzjowx88.execute-api.us-west-2.amazonaws.com/h2now/all-branches/cso-event/1";
 
 	let labels = {
 		good: "Good",
@@ -33,19 +44,173 @@
 		high: "High caution",
 	};
 
+	function getCaution(branch, value, csoEvents) {
+		// Start with CSO. If a date is found, then return high caution no matter what
+		if (csoEvents[branch]) return "high";
+
+		// An object of arrays, in order. Starting from good, and working up the severity scale.
+		// Each element is a pair of caution keyword and max value
+		let breaks = {
+			main: [
+				["good", 6],
+				["low", 8],
+			],
+			south: [
+				["good", 28],
+				["low", 38],
+			],
+			north: [
+				["good", 33],
+				["low", 54],
+			],
+		};
+
+		for (let [caution, max] of breaks[branch]) {
+			if (value <= max) return caution;
+		}
+		return "high";
+	}
+
 	setContext(contextKey, {
 		fetchingData,
 	});
 
+	/*
+		"main": {
+		"value": 55,
+		"average": 21,
+		"high": 90,
+		"low": 10,
+		"caution": "low",
+		"updated": "2021-07-25T10:33:36.743"
+	}
+	*/
+
 	onMount(async () => {
-		try {
-			// Fetch our data, then replace our empty data var with it. This will cause the dials to "click" into place.
-			$data = await fetch(data_url).then(response => response.json());
-			console.log($data);
-		} catch (e) {
-			console.error("!!! Trouble getting data");
-			console.error(e);
-		}
+		$fetchingData = true;
+		// Do the main
+
+		csoEvents = await fetch(CSO)
+			.then(r => r.json())
+			.then(data => {
+				const tagsList = data?.data?.dataModel?.tagsList;
+				if (tagsList) {
+					const today = new Date();
+
+					return tagsList.reduce((acc, cur) => {
+						const { title, valueDate } = cur;
+
+						if (title.toLowerCase().includes("downstream")) {
+							try {
+								let csoDate = new Date(valueDate);
+								// If the time of the last CSO was less than 48 hours ago, store the date
+								acc.south =
+									(today - csoDate) / 1000 / 60 / 60 > 48 ? "" : new Date(valueDate);
+							} catch (e) {
+								// This is not a valid date. Ignore it.
+								acc.south = "";
+							}
+						} else if (title.toLowerCase().includes("upstream")) {
+							try {
+								let csoDate = new Date(valueDate);
+								// If the time of the last CSO was less than 72 hours ago, store the date
+								acc.north =
+									(today - csoDate) / 1000 / 60 / 60 > 72 ? "" : new Date(valueDate);
+							} catch (e) {
+								// This is not a valid date. Ignore it.
+								acc.north = "";
+							}
+						} else if (title.toLowerCase().includes("ms")) {
+							try {
+								let csoDate = new Date(valueDate);
+								// If the time of the last CSO was less than 24 hours ago, store the date
+								acc.main =
+									(today - csoDate) / 1000 / 60 / 60 > 24 ? "" : new Date(valueDate);
+							} catch (e) {
+								// This is not a valid date. Ignore it.
+								acc.main = "";
+							}
+						}
+						return acc;
+					}, {});
+				}
+			})
+			.catch(console.error);
+		Promise.all([
+			fetch(MAIN_STEM)
+				.then(r => r.json())
+				.then(data => {
+					let tagsList = data?.data?.dataModel?.tagsList;
+					if (tagsList) {
+						for (let tag of tagsList) {
+							const { title, value } = tag;
+							switch (title) {
+								case "Last Hour Average":
+									if (value) {
+										$gaugeData.main.value = value;
+										$gaugeData.main.caution = getCaution("main", value, csoEvents);
+									}
+									break;
+								case "Last Month Average":
+									if (value) $gaugeData.main.average = value;
+									break;
+								case "Last Month Maximum":
+									if (value) $gaugeData.main.high = value;
+									break;
+								case "Last Month Minimum":
+									if (value) $gaugeData.main.low = value;
+									break;
+							}
+						}
+					}
+				})
+				.catch(console.error),
+			// Also do the NORTH/SOUTH
+			fetch(NORTH_AND_SOUTH)
+				.then(r => r.json())
+				.then(data => {
+					let tagsList = data?.data?.dataModel?.tagsList;
+					if (tagsList) {
+						for (let tag of tagsList) {
+							const { title, value } = tag;
+							switch (title) {
+								case "NB Last Hour Average":
+									if (value) {
+										$gaugeData.north.value = value;
+										$gaugeData.north.caution = getCaution("north", value, csoEvents);
+									}
+									break;
+								case "NB Last Month Average":
+									if (value) $gaugeData.north.average = value;
+									break;
+								case "NB Last Month Maximum":
+									if (value) $gaugeData.north.high = value;
+									break;
+								case "NB Last Month Minimum":
+									if (value) $gaugeData.north.low = value;
+									break;
+								case "SB Last Hour Average":
+									if (value) {
+										$gaugeData.south.value = value;
+										$gaugeData.south.caution = getCaution("south", value, csoEvents);
+									}
+									break;
+								case "SB Last Month Average":
+									if (value) $gaugeData.south.average = value;
+									break;
+								case "SB Last Month Maximum":
+									if (value) $gaugeData.south.high = value;
+									break;
+								case "SB Last Month Minimum":
+									if (value) $gaugeData.south.low = value;
+									break;
+							}
+						}
+					}
+				})
+				.catch(console.error),
+		]);
+		$fetchingData = false;
 	});
 </script>
 
@@ -136,8 +301,9 @@
 			<Dial
 				visible={id === visibleBranch || !$isMobile}
 				{...dial}
-				{...$data[id]}
-				{labels} />
+				{...$gaugeData[id]}
+				{labels}
+				cso={csoEvents[id]} />
 		{/each}
 	</div>
 </div>
