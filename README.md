@@ -2,8 +2,10 @@
 
 This is a svelte app.
 
-1) `npm install`
-2) `npm run dev` to run it locally at [https://localhost:5000](https://localhost:5000)
+1) Clone the repo
+2) `cd` into the directory root, then `npm install`.
+3) `npm generate`
+4) `npm run dev` to run it locally at [https://localhost:5000](https://localhost:5000)
 
 
 ## Configuring the dials
