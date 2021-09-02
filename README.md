@@ -1,6 +1,6 @@
 # water-quality-dials
 
-This is a svelte app.
+This is a svelte app. You need node installed.
 
 1) Clone the repo
 2) `cd` into the directory root, then `npm install`.
