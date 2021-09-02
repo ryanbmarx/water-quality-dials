@@ -14,9 +14,9 @@ TKTKTKTK
 
 ## Deploying/publishing
 
-1) Run `npm run generate` to make `./public/dials.html`
+1) Run `npm run generate` to make `./public/index.html`
 2) Run `npm run build` to create the javascript and css bundle files.
-3) The HTML contents can be copied en masse and pasted into the CMS, where the code should live.
-4) The bundle files should be uploaded to the web server (location TK)
+3) The HTML contents are rendered to the index file and are suitable for a pym iframe.
+4) The bundle files and HTML index should be uploaded to the web server.
 
 _The generate command also creates `./public/index.html` for local and github.io-based previewing_
