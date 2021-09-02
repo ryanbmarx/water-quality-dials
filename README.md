@@ -18,5 +18,3 @@ TKTKTKTK
 2) Run `npm run build` to create the javascript and css bundle files.
 3) The HTML contents are rendered to the index file and are suitable for a pym iframe.
 4) The bundle files and HTML index should be uploaded to the web server.
-
-_The generate command also creates `./public/index.html` for local and github.io-based previewing_
