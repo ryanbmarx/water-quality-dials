@@ -10,9 +10,34 @@ This is a svelte app. You need node installed.
 
 ## Configuring the dials
 
-This uses a blob of json on the page to feed microcopy and other configuration info. The settings file can be found in `./functions/settings.json`
+This uses a blob of json on the page to feed microcopy and other configuration info. The settings file can be found in `./functions/settings.json`. The configuration is rendered to a `<script>` tag on the index and consumed as App props. 
 
-TKTKTKTK
+_example_
+
+```
+"south": {
+    "name": "South Branch",
+    "description": "Near Eleanor Boat House",
+    "min": 0,
+    "max": 100,
+    "main_dial_stops": 10,
+    "main_gauge_stops": 5
+}
+```
+
+Supported options are:
+
+key|value
+---|---
+name | The main gauge name. Appears in bold at the top of each guage
+description | Small italic descriptor underneath the name
+min | The lowest _possible_ value reflected on the gauges. Probably `0`.
+max | The highest _possible_ value reflected on the gauges. Probably `100`.
+main_dial_stops | The number of tick marks along the main dial.
+main_gauge_stops | The number of main ticks on the chart at the bottom. 
+		
+
+
 
 ## Deploying/publishing
 
