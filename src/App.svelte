@@ -53,16 +53,16 @@
 		// Each element is a pair of caution keyword and max value
 		let breaks = {
 			main: [
-				["good", 6],
-				["low", 8],
+				["good", 3],
+				["low", 6],
 			],
 			south: [
-				["good", 28],
-				["low", 38],
+				["good", 22],
+				["low", 28],
 			],
 			north: [
 				["good", 33],
-				["low", 54],
+				["low", 52],
 			],
 		};
 
