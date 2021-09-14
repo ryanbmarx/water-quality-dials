@@ -10,7 +10,7 @@
 		},
 		"north": {
 			"name": "North Branch",
-			"description": "Near Goose Island",
+			"description": "Near Goose Island (Temporarily Out of Service)",
 			"min": 0,
 			"max": 100,
 			"main_dial_stops": 10,
