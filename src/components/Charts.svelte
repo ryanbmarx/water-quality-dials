@@ -147,7 +147,7 @@
 
 <div class="chart">
 	<div class="circles">
-		<DialOuter {average} {uniqueSlug} {min} {max} />
+		<DialOuter {value} {average} {uniqueSlug} {min} {max} />
 		<div class="circle circle--clip circle--inner-bg" />
 		<ul class="stops">
 			{#each Array(main_dial_stops + 1) as _, stop}

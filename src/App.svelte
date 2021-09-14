@@ -133,7 +133,7 @@
 			})
 			.catch(console.error);
 
-		fetch(MAIN_STEM)
+		const main = fetch(MAIN_STEM)
 			.then(r => r.json())
 			.then(data => {
 				const { tagsList } = data?.data?.dataModel;
@@ -166,7 +166,7 @@
 			})
 			.catch(console.error);
 		// Also do the NORTH/SOUTH
-		fetch(NORTH_AND_SOUTH)
+		const branches = fetch(NORTH_AND_SOUTH)
 			.then(r => r.json())
 			.then(data => {
 				let tagsList = data?.data?.dataModel?.tagsList;
@@ -216,6 +216,11 @@
 				}
 			})
 			.catch(console.error);
+
+		// Once all the data is fetched, we can end our loading state
+		Promise.all([main, branches]).then(d => {
+			// $fetchingData = false;
+		});
 	});
 
 	afterUpdate(() => {

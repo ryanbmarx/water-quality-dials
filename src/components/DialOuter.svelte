@@ -3,6 +3,7 @@
 
 	export let min;
 	export let max;
+	export let value;
 	let range = parseInt(max) - parseInt(min);
 
 	// This is the value we want to display
@@ -138,6 +139,6 @@
 		<path class:visible={average} class="cover" d={d(coverPercent)} />
 	</svg>
 </div>
-<p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end}>
+<p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end && value}>
 	Average for last month: <strong>{average} ppb</strong>
 </p>
