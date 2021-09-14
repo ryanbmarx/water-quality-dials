@@ -39,8 +39,8 @@
 
 	const stops = getStops();
 
-	function getLabel(val) {
-		return val ? `${val} ppb` : DEFAULT_LABEL_TEXT;
+	function getLabel(val, display) {
+		return val && display ? `${val} ppb` : DEFAULT_LABEL_TEXT;
 	}
 </script>
 
@@ -70,25 +70,6 @@
 		height: 2px;
 		background: #aaa;
 	}
-
-	/* .tick {
-		display: inline-block;
-		width: 2px;
-		height: 1.2em;
-		background: black;
-		z-index: 2;
-	} */
-	/* 
-	.average {
-		display: inline-block;
-		z-index: 2;
-		height: 1.2em;
-
-		width: 10px;
-		background: var(--gauge-color-value);
-		max-height: 2em;
-		opacity: 0.9;
-	} */
 
 	.tick {
 		display: block;
@@ -164,13 +145,13 @@
 		{/each}
 	</ul>
 	<div class="gauge__chart">
-		{#if average}
+		{#if value && average}
 			<span style="left: {placeAvg}%;" class="tick tick--average" />
 		{/if}
-		{#if high}
+		{#if value && high}
 			<span style="left: {placeHigh}%" class="tick tick--high" />
 		{/if}
-		{#if low}
+		{#if value && low}
 			<span style="left: {placeLow}%" class="tick tick--low" />
 		{/if}
 		{#if value}
@@ -180,23 +161,19 @@
 	<ul class="legend">
 		<li class="legend__item">
 			<span class="tick tick--average" />
-			{#if average}
-				<span class="legend__text">Average: {average} ppb</span>
-			{:else}
-				<span class="legend__text">Average: {DEFAULT_LABEL_TEXT}</span>
-			{/if}
+			<span class="legend__text">Average: {getLabel(average, value)}</span>
 		</li>
 		<li>
 			<span class="tick tick--high" />
-			<span class="legend__text">High: {getLabel(high)}</span>
+			<span class="legend__text">High: {getLabel(high, value)}</span>
 		</li>
 		<li>
 			<span class="tick tick--low" />
-			<span class="legend__text">Low: {getLabel(low)}</span>
+			<span class="legend__text">Low: {getLabel(low, value)}</span>
 		</li>
 		<li>
 			<span class="tick tick--value" />
-			<span class="legend__text">Latest: {getLabel(value)}</span>
+			<span class="legend__text">Latest: {getLabel(value, value)}</span>
 		</li>
 	</ul>
 </div>
