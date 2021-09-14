@@ -135,7 +135,7 @@
 		class="circle--outer-dial__highlight"
 		viewBox="{-0.5 * width} {-0.5 * height} {width} {height}"
 		xmlns="http://www.w3.org/2000/svg">
-		<path class:visible={average} class="highlight" d={d(highlightPercent)} />
+		<path class:visible={average && value} class="highlight" d={d(highlightPercent)} />
 		<path class:visible={average} class="cover" d={d(coverPercent)} />
 	</svg>
 </div>

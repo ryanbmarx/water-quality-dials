@@ -219,7 +219,7 @@
 
 		// Once all the data is fetched, we can end our loading state
 		Promise.all([main, branches]).then(d => {
-			// $fetchingData = false;
+			$fetchingData = false;
 		});
 	});
 
