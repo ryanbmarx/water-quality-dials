@@ -140,12 +140,12 @@
 	<h2 class="stem">{name}</h2>
 	<p class="description">{description}</p>
 	<Charts {uniqueSlug} {average} {min} {max} {value} {main_dial_stops} />
-	<Timestamp {updated} />
+	<Timestamp {value} {updated} />
 	<span class:visible={value} aria-hidden={!value} class="label">{label}</span>
 	<span class:visible={value} aria-hidden={!value} class="value">{value} ppb</span>
 	<CSO {cso} />
 	<Gauge {uniqueSlug} {average} {high} {low} {min} {max} {value} {main_gauge_stops} />
-	{#if !value}
-		<LoadingAnimation text={$fetchingData ? "Refreshing data" : "Data not available"} />
+	{#if $fetchingData}
+		<LoadingAnimation text="Refreshing data" />
 	{/if}
 </div>
