@@ -2,6 +2,7 @@
 	import { format } from "date-fns-tz";
 
 	export let updated = "";
+	export let value = "";
 
 	const DATE_FORMAT = "d, yyyy";
 	// const TIME_FORMAT = "h:mm aa zzz";
@@ -59,6 +60,6 @@
 	}
 </style>
 
-<span class="timestamp" class:visible={updated} aria-hidden={!updated}>
+<span class="timestamp" class:visible={updated && value} aria-hidden={!updated}>
 	Water conditions:<br /><time datetime={time.getTime()}>{timeFormatted}</time>
 </span>

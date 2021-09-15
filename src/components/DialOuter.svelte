@@ -3,6 +3,7 @@
 
 	export let min;
 	export let max;
+	export let value;
 	let range = parseInt(max) - parseInt(min);
 
 	// This is the value we want to display
@@ -134,10 +135,10 @@
 		class="circle--outer-dial__highlight"
 		viewBox="{-0.5 * width} {-0.5 * height} {width} {height}"
 		xmlns="http://www.w3.org/2000/svg">
-		<path class:visible={average} class="highlight" d={d(highlightPercent)} />
+		<path class:visible={average && value} class="highlight" d={d(highlightPercent)} />
 		<path class:visible={average} class="cover" d={d(coverPercent)} />
 	</svg>
 </div>
-<p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end}>
+<p id="{uniqueSlug}-outer-label" class="label" class:visible={start && end && value}>
 	Average for last month: <strong>{average} ppb</strong>
 </p>
